@@ -9,13 +9,8 @@ jobs:
       matrix:
         arduino-platform:
         # Alphabetical order
-        - 'cluenrf52840'
-        - 'cplaynrf52840'
-        - 'feather52832'
-        - 'feather52840'
-        - 'feather52840sense'
-        - 'itsybitsy52840'
-        - 'ledglasses_nrf52840'
+        - 'xiaonRF52840'
+        - 'xiaonRF52840Sense'
 
     runs-on: ubuntu-latest
     
@@ -43,7 +38,7 @@ jobs:
         
     - name: Install BSP and Libraries
       env:
-        BSP_URL: https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+        BSP_URL: https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
         BSP_PATH: .arduino15/packages/adafruit/hardware/nrf52
       run: |
         arduino-cli config init
