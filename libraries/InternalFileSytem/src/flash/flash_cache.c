@@ -83,13 +83,8 @@ void flash_cache_flush (flash_cache_t* fc)
   // skip erase & program if verify() exists, and memory matches
   if ( !(fc->verify && fc->verify(fc->cache_addr, fc->cache_buf, FLASH_CACHE_SIZE)) )
   {
-    // indicator TODO allow to disable flash indicator
-    ledOn(LED_BUILTIN);
-
     fc->erase(fc->cache_addr);
     fc->program(fc->cache_addr, fc->cache_buf, FLASH_CACHE_SIZE);
-
-    ledOff(LED_BUILTIN);
   }
 
   fc->cache_addr = FLASH_CACHE_INVALID_ADDR;
