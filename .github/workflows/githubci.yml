@@ -39,12 +39,12 @@ jobs:
     - name: Install BSP and Libraries
       env:
         BSP_URL: https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
-        BSP_PATH: .arduino15/packages/adafruit/hardware/nrf52
+        BSP_PATH: .arduino15/packages/Seeeduino/hardware/nrf52
       run: |
         arduino-cli config init
         arduino-cli core update-index
         arduino-cli core update-index --additional-urls $BSP_URL
-        arduino-cli core install adafruit:nrf52 --additional-urls $BSP_URL
+        arduino-cli core install nrf52 --additional-urls $BSP_URL
 
         # Repalce release BSP with our code
         BSP_VERSION=`eval ls $HOME/$BSP_PATH`
