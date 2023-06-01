@@ -29,8 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NRFX_CONFIG_NRF52840_H__
-#define NRFX_CONFIG_NRF52840_H__
+#ifndef NRFX_CONFIG_NRF52832_H__
+#define NRFX_CONFIG_NRF52832_H__
 
 // <<< Use Configuration Wizard in Context Menu >>>\n
 
@@ -656,7 +656,7 @@
 // <e> NRFX_POWER_ENABLED - nrfx_power - POWER peripheral driver
 //==========================================================
 #ifndef NRFX_POWER_ENABLED
-#define NRFX_POWER_ENABLED 1
+#define NRFX_POWER_ENABLED 0
 #endif
 // <o> NRFX_POWER_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
 
@@ -850,12 +850,6 @@
 #define NRFX_PWM2_ENABLED 0
 #endif
 
-// <q> NRFX_PWM3_ENABLED  - Enable PWM3 instance
-
-#ifndef NRFX_PWM3_ENABLED
-#define NRFX_PWM3_ENABLED 0
-#endif
-
 // <o> NRFX_PWM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
 
 // <0=> 0 (highest)
@@ -918,6 +912,34 @@
 
 #ifndef NRFX_PWM_CONFIG_DEBUG_COLOR
 #define NRFX_PWM_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// <e> NRFX_PWM_NRF52_ANOMALY_109_WORKAROUND_ENABLED - Enables nRF52 Anomaly 109 workaround for PWM.
+
+// <i> The workaround uses interrupts to wake up the CPU and ensure
+// <i> it is active when PWM is about to start a DMA transfer. For
+// <i> initial transfer, done when a playback is started via PPI,
+// <i> a specific EGU instance is used to generate the interrupt.
+// <i> During the playback, the PWM interrupt triggered on SEQEND
+// <i> event of a preceding sequence is used to protect the transfer
+// <i> done for the next sequence to be played.
+//==========================================================
+#ifndef NRFX_PWM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
+#define NRFX_PWM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
+#endif
+// <o> NRFX_PWM_NRF52_ANOMALY_109_EGU_INSTANCE  - EGU instance used by the nRF52 Anomaly 109 workaround for PWM.
+
+// <0=> EGU0
+// <1=> EGU1
+// <2=> EGU2
+// <3=> EGU3
+// <4=> EGU4
+// <5=> EGU5
+
+#ifndef NRFX_PWM_NRF52_ANOMALY_109_EGU_INSTANCE
+#define NRFX_PWM_NRF52_ANOMALY_109_EGU_INSTANCE 5
 #endif
 
 // </e>
@@ -995,29 +1017,6 @@
 #endif
 
 // </e>
-
-// </e>
-
-// <e> NRFX_QSPI_ENABLED - nrfx_qspi - QSPI peripheral driver
-//==========================================================
-#ifndef NRFX_QSPI_ENABLED
-#define NRFX_QSPI_ENABLED 1
-#endif
-
-// <o> NRFX_QSPI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
-
-// <0=> 0 (highest)
-// <1=> 1
-// <2=> 2
-// <3=> 3
-// <4=> 4
-// <5=> 5
-// <6=> 6
-// <7=> 7
-
-#ifndef NRFX_QSPI_DEFAULT_CONFIG_IRQ_PRIORITY
-#define NRFX_QSPI_DEFAULT_CONFIG_IRQ_PRIORITY 7
-#endif
 
 // </e>
 
@@ -1263,7 +1262,7 @@
 // <e> NRFX_SPIM_ENABLED - nrfx_spim - SPIM peripheral driver
 //==========================================================
 #ifndef NRFX_SPIM_ENABLED
-#define NRFX_SPIM_ENABLED 1
+#define NRFX_SPIM_ENABLED 0
 #endif
 // <q> NRFX_SPIM0_ENABLED  - Enable SPIM0 instance
 
@@ -1283,21 +1282,7 @@
 
 
 #ifndef NRFX_SPIM2_ENABLED
-#define NRFX_SPIM2_ENABLED 1
-#endif
-
-// <q> NRFX_SPIM3_ENABLED  - Enable SPIM3 instance
-
-
-#ifndef NRFX_SPIM3_ENABLED
-#define NRFX_SPIM3_ENABLED 1
-#endif
-
-// <q> NRFX_SPIM_EXTENDED_ENABLED  - Enable extended SPIM features
-
-
-#ifndef NRFX_SPIM_EXTENDED_ENABLED
-#define NRFX_SPIM_EXTENDED_ENABLED 0
+#define NRFX_SPIM2_ENABLED 0
 #endif
 
 // <o> NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -1312,7 +1297,7 @@
 // <7=> 7
 
 #ifndef NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY
-#define NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY 6
+#define NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY 7
 #endif
 
 // <e> NRFX_SPIM_CONFIG_LOG_ENABLED - Enables logging in the module.
@@ -1366,14 +1351,18 @@
 
 // </e>
 
-// <q> NRFX_SPIM3_NRF52840_ANOMALY_198_WORKAROUND_ENABLED  - Enables nRF52840 anomaly 198 workaround for SPIM3.
+// <q> NRFX_SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED  - Enables nRF52 anomaly 109 workaround for SPIM.
 
 
-// <i> See more in the Errata document located at
+// <i> The workaround uses interrupts to wake up the CPU by catching
+// <i> a start event of zero-length transmission to start the clock. This
+// <i> ensures that the DMA transfer will be executed without issues and
+// <i> that the proper transfer will be started. See more in the Errata
+// <i> document or Anomaly 109 Addendum located at
 // <i> https://infocenter.nordicsemi.com/
 
-#ifndef NRFX_SPIM3_NRF52840_ANOMALY_198_WORKAROUND_ENABLED
-#define NRFX_SPIM3_NRF52840_ANOMALY_198_WORKAROUND_ENABLED 0
+#ifndef NRFX_SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
+#define NRFX_SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
 #endif
 
 // </e>
@@ -1469,6 +1458,20 @@
 #endif
 
 // </e>
+
+// <q> NRFX_SPIS_NRF52_ANOMALY_109_WORKAROUND_ENABLED  - Enables nRF52 Anomaly 109 workaround for SPIS.
+
+
+// <i> The workaround uses a GPIOTE channel to generate interrupts
+// <i> on falling edges detected on the CSN line. This will make
+// <i> the CPU active for the moment when SPIS starts DMA transfers,
+// <i> and this way the transfers will be protected.
+// <i> This workaround uses GPIOTE driver, so this driver must be
+// <i> enabled as well.
+
+#ifndef NRFX_SPIS_NRF52_ANOMALY_109_WORKAROUND_ENABLED
+#define NRFX_SPIS_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
+#endif
 
 // </e>
 
@@ -1784,6 +1787,19 @@
 
 // </e>
 
+// <q> NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED  - Enables nRF52 anomaly 109 workaround for TWIM.
+
+
+// <i> The workaround uses interrupts to wake up the CPU by catching
+// <i> the start event of zero-frequency transmission, clear the
+// <i> peripheral, set desired frequency, start the peripheral, and
+// <i> the proper transmission. See more in the Errata document or
+// <i> Anomaly 109 Addendum located at https://infocenter.nordicsemi.com/
+
+#ifndef NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
+#define NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
+#endif
+
 // </e>
 
 // <e> NRFX_TWIS_ENABLED - nrfx_twis - TWIS peripheral driver
@@ -1986,12 +2002,6 @@
 #define NRFX_UARTE0_ENABLED 0
 #endif
 
-// <q> NRFX_UARTE1_ENABLED - Enable UARTE1 instance
-
-#ifndef NRFX_UARTE1_ENABLED
-#define NRFX_UARTE1_ENABLED 0
-#endif
-
 // <o> NRFX_UARTE_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
 
 // <0=> 0 (highest)
@@ -2140,101 +2150,6 @@
 
 // </e>
 
-// <e> NRFX_USBD_ENABLED - nrfx_usbd - USBD peripheral driver
-//==========================================================
-#ifndef NRFX_USBD_ENABLED
-#define NRFX_USBD_ENABLED 0
-#endif
-// <o> NRFX_USBD_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
-
-// <0=> 0 (highest)
-// <1=> 1
-// <2=> 2
-// <3=> 3
-// <4=> 4
-// <5=> 5
-// <6=> 6
-// <7=> 7
-
-#ifndef NRFX_USBD_DEFAULT_CONFIG_IRQ_PRIORITY
-#define NRFX_USBD_DEFAULT_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <q> USBD_CONFIG_DMASCHEDULER_ISO_BOOST  - Give priority to isochronous transfers
-
-// <i> This option gives priority to isochronous transfers.
-// <i> Enabling it assures that isochronous transfers are always processed,
-// <i> even if multiple other transfers are pending.
-// <i> Isochronous endpoints are prioritized before the usbd_dma_scheduler_algorithm
-// <i> function is called, so the option is independent of the algorithm chosen.
-
-#ifndef NRFX_USBD_CONFIG_DMASCHEDULER_ISO_BOOST
-#define NRFX_USBD_CONFIG_DMASCHEDULER_ISO_BOOST 1
-#endif
-
-// <q> USBD_CONFIG_ISO_IN_ZLP  - Respond to an IN token on ISO IN endpoint with ZLP when no data is ready
-
-
-// <i> If set, ISO IN endpoint will respond to an IN token with ZLP when no data is ready to be sent.
-// <i> Else, there will be no response.
-
-#ifndef NRFX_USBD_CONFIG_ISO_IN_ZLP
-#define NRFX_USBD_CONFIG_ISO_IN_ZLP 0
-#endif
-
-// <e> NRFX_USBD_CONFIG_LOG_ENABLED - Enable logging in the module
-//==========================================================
-#ifndef NRFX_USBD_CONFIG_LOG_ENABLED
-#define NRFX_USBD_CONFIG_LOG_ENABLED 0
-#endif
-// <o> NRFX_USBD_CONFIG_LOG_LEVEL  - Default Severity level
-
-// <0=> Off
-// <1=> Error
-// <2=> Warning
-// <3=> Info
-// <4=> Debug
-
-#ifndef NRFX_USBD_CONFIG_LOG_LEVEL
-#define NRFX_USBD_CONFIG_LOG_LEVEL 3
-#endif
-
-// <o> NRFX_USBD_CONFIG_INFO_COLOR  - ANSI escape code prefix.
-
-// <0=> Default
-// <1=> Black
-// <2=> Red
-// <3=> Green
-// <4=> Yellow
-// <5=> Blue
-// <6=> Magenta
-// <7=> Cyan
-// <8=> White
-
-#ifndef NRFX_USBD_CONFIG_INFO_COLOR
-#define NRFX_USBD_CONFIG_INFO_COLOR 0
-#endif
-
-// <o> NRFX_USBD_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
-
-// <0=> Default
-// <1=> Black
-// <2=> Red
-// <3=> Green
-// <4=> Yellow
-// <5=> Blue
-// <6=> Magenta
-// <7=> Cyan
-// <8=> White
-
-#ifndef NRFX_USBD_CONFIG_DEBUG_COLOR
-#define NRFX_USBD_CONFIG_DEBUG_COLOR 0
-#endif
-
-// </e>
-
-// </e>
-
 // <e> NRFX_WDT_ENABLED - nrfx_wdt - WDT peripheral driver
 //==========================================================
 #ifndef NRFX_WDT_ENABLED
@@ -2326,4 +2241,4 @@
 
 // </h>
 
-#endif // NRFX_CONFIG_NRF52840_H__
+#endif // NRFX_CONFIG_NRF52832_H__

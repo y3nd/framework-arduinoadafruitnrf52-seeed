@@ -30,26 +30,27 @@ POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef NRF52810_NAME_CHANGE_H
-#define NRF52810_NAME_CHANGE_H
+#ifndef NRF9160_NAME_CHANGE_H
+#define NRF9160_NAME_CHANGE_H
 
 /*lint ++flb "Enter library region */
 
-/* This file is given to prevent your SW from not compiling with the updates made to nrf52810.h and 
- * nrf52810_bitfields.h. The macros defined in this file were available previously. Do not use these
- * macros on purpose. Use the ones defined in nrf52810.h and nrf52810_bitfields.h instead.
+/* This file is given to prevent your SW from not compiling with the updates made to nrf9160.h and 
+ * nrf9160_bitfields.h. The macros defined in this file were available previously. Do not use these
+ * macros on purpose. Use the ones defined in nrf9160.h and nrf9160_bitfields.h instead.
  */
  
- /* IRQ */
- /* Changes of interrupt names */
- #define SPIM0_SPIS0_IRQn       SPIM0_SPIS0_SPI0_IRQn
- #define TWIM0_TWIS0_IRQn       TWIM0_TWIS0_TWI0_IRQn
- #define UARTE0_IRQn            UARTE0_UART0_IRQn
+ /* SAADC enums */
+ /* Changes to enum names in SAADC */
+ #define SAADC_CH_PSELP_PSELP_VDD       SAADC_CH_PSELP_PSELP_VDDGPIO
+ #define SAADC_CH_PSELP_PSELN_VDD       SAADC_CH_PSELP_PSELN_VDDGPIO
  
- #define SPIM0_SPIS0_IRQHandler SPIM0_SPIS0_SPI0_IRQHandler
- #define TWIM0_TWIS0_IRQHandler TWIM0_TWIS0_TWI0_IRQHandler
- #define UARTE0_IRQHandler      UARTE0_UART0_IRQHandler
+ /* CTRLAP PERI Fields */
+ #define CTRLAPPERI_ERASEPROTECT_LOCK_ERASEPROTECTLOCK_Pos       CTRLAPPERI_ERASEPROTECT_LOCK_LOCK_Pos     
+ #define CTRLAPPERI_ERASEPROTECT_LOCK_ERASEPROTECTLOCK_Msk       CTRLAPPERI_ERASEPROTECT_LOCK_LOCK_Msk     
+ #define CTRLAPPERI_ERASEPROTECT_LOCK_ERASEPROTECTLOCK_Unlocked  CTRLAPPERI_ERASEPROTECT_LOCK_LOCK_Unlocked
+ #define CTRLAPPERI_ERASEPROTECT_LOCK_ERASEPROTECTLOCK_Locked    CTRLAPPERI_ERASEPROTECT_LOCK_LOCK_Locked  
  
  /*lint --flb "Leave library region" */
 
-#endif /* NRF52810_NAME_CHANGE_H */
+#endif /* NRF9160_NAME_CHANGE_H */
