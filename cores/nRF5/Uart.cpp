@@ -24,7 +24,9 @@
 
 void serialEventRun(void)
 {
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
   if (serialEvent && Serial.available() ) serialEvent();
+#endif
 
 #if defined(PIN_SERIAL1_RX) && defined(PIN_SERIAL1_TX)
   if (serialEvent1 && Serial1.available() ) serialEvent1();
@@ -257,8 +259,8 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
 #ifdef NRF52832_XXAA
   Uart Serial( NRF_UARTE0, UARTE0_UART0_IRQn, PIN_SERIAL_RX, PIN_SERIAL_TX );
 #else
-  Uart Serial1( NRF_UARTE0, UARTE0_UART0_IRQn, PIN_SERIAL1_RX, PIN_SERIAL1_TX );
-#endif
+#if defined(PIN_SERIAL1_RX) && defined(PIN_SERIAL1_TX)
+Uart Serial1( NRF_UARTE0, UARTE0_UART0_IRQn, PIN_SERIAL1_RX, PIN_SERIAL1_TX );
 
 extern "C"
 {
@@ -267,6 +269,8 @@ extern "C"
     SERIAL_PORT_HARDWARE.IrqHandler();
   }
 }
+#endif
+#endif
 
 //------------- Serial2 -------------//
 #if defined(PIN_SERIAL2_RX) && defined(PIN_SERIAL2_TX)

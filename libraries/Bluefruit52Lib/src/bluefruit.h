@@ -200,7 +200,9 @@ class AdafruitBluefruit
     void _stopConnLed  (void);
     void _setConnLed   (bool on_off);
 
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
     void printInfo(void);
+#endif
 
   private:
     /*------------- SoftDevice Configuration -------------*/

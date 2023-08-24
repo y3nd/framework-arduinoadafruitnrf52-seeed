@@ -102,7 +102,9 @@ class Uart : public HardwareSerial
 
 #endif
 
+#if defined(PIN_SERIAL1_RX) && defined(PIN_SERIAL1_TX)
 extern Uart SERIAL_PORT_HARDWARE;
+#endif
 
 #if defined(PIN_SERIAL2_RX) && defined(PIN_SERIAL2_TX)
 extern Uart Serial2;

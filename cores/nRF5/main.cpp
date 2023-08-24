@@ -52,9 +52,12 @@ static void loop_task(void* arg)
   TinyUSB_Device_Init(0);
 #endif
 
-#if CFG_DEBUG
+#if CFG_LOGGER == 0
   // If Serial is not begin(), call it to avoid hard fault
   if(!Serial) Serial.begin(115200);
+#elif CFG_LOGGER == 1
+  // If Serial1 is not begin(), call it to avoid hard fault
+  if(!Serial1) Serial1.begin(115200);
 #endif
 
   setup();
@@ -115,6 +118,7 @@ void resumeLoop(void)
   }
 }
 
+#if CFG_LOGGER != 3 || defined(NRF52832_XXAA)
 extern "C"
 {
 
@@ -126,25 +130,29 @@ int _write (int fd, const void *buf, size_t count)
 
   size_t ret = 0;
 
-#if CFG_LOGGER == 2 || CFG_SYSVIEW
-  SEGGER_RTT_Write(0, buf, count);
-  ret = count;
+#if CFG_LOGGER == 0 || defined(NRF52832_XXAA)
+
+  if ( Serial )
+  {
+    ret = Serial.write((const uint8_t *) buf, count);
+  }
 
 #elif CFG_LOGGER == 1
+
   if ( Serial1 )
   {
     ret = Serial1.write((const uint8_t *) buf, count);
   }
 
-#else
-  if ( Serial )
-  {
-    ret = Serial.write((const uint8_t *) buf, count);
-  }
+#elif CFG_LOGGER == 2
+
+  SEGGER_RTT_Write(0, buf, count);
+  ret = count;
+
 #endif
 
   return (int) ret;
 }
 
 }
-
+#endif

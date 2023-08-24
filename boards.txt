@@ -1,6 +1,7 @@
 menu.softdevice=SoftDevice
 menu.debug=Debug
-menu.debug_output=Debug Output
+menu.debug_output=Print Port
+menu.usb_cdc=Serial (USB-CDC)
 
 # ----------------------------------
 # Seeed XIAO nRF52840
@@ -109,3 +110,58 @@ xiaonRF52840Sense.menu.debug.l2.build.debug_flags=-DCFG_DEBUG=2
 xiaonRF52840Sense.menu.debug.l3=Level 3 (Segger SystemView)
 xiaonRF52840Sense.menu.debug.l3.build.debug_flags=-DCFG_DEBUG=3
 xiaonRF52840Sense.menu.debug.l3.build.sysview_flags=-DCFG_SYSVIEW=1
+
+# -----------------------------------
+# Seeed Wio Tracker 1110
+# -----------------------------------
+wio_tracker_1110.name=Seeed Wio Tracker 1110
+
+# Upload
+wio_tracker_1110.bootloader.tool=bootburn
+wio_tracker_1110.upload.tool=nrfutil
+wio_tracker_1110.upload.protocol=nrfutil
+wio_tracker_1110.upload.use_1200bps_touch=true
+wio_tracker_1110.upload.wait_for_upload_port=true
+wio_tracker_1110.upload_port.0.vid=0x2886
+wio_tracker_1110.upload_port.0.pid=0x8055
+wio_tracker_1110.upload_port.1.vid=0x2886
+wio_tracker_1110.upload_port.1.pid=0x0055
+
+## Flash 0x000e_8000 - 0x0002_6000
+wio_tracker_1110.upload.maximum_size=794624
+## RAM   0x2004_0000 - 0x2000_6000
+wio_tracker_1110.upload.maximum_data_size=237568
+
+# Build
+wio_tracker_1110.build.mcu=cortex-m4
+wio_tracker_1110.build.f_cpu=64000000
+wio_tracker_1110.build.board=WIO_TRACKER_1110
+wio_tracker_1110.build.core=nRF5
+wio_tracker_1110.build.variant=Seeed_Wio_Tracker_1110
+wio_tracker_1110.build.usb_manufacturer="Seeed"
+wio_tracker_1110.build.usb_product="Wio Tracker 1110"
+wio_tracker_1110.build.extra_flags=-DNRF52840_XXAA {build.flags.usb} -DSEGGER_RTT_MAX_NUM_UP_BUFFERS=2 -DSEGGER_RTT_MAX_NUM_DOWN_BUFFERS=2 -DSEGGER_RTT_MODE_DEFAULT=SEGGER_RTT_MODE_NO_BLOCK_SKIP -DBUFFER_SIZE_UP=2048 -DBUFFER_SIZE_DOWN=4 -DNRFX_NVMC_ENABLED=1 -DNRFX_RNG_ENABLED=1 -DNRFX_RTC_ENABLED=1 -DNRFX_RTC2_ENABLED=1 -DNRFX_RTC_DEFAULT_CONFIG_IRQ_PRIORITY=6 -DNRFX_TIMER_ENABLED=1 -DNRFX_TIMER2_ENABLED=1 -DNRFX_WDT_ENABLED=1 -DNRFX_WDT0_ENABLED=1 -DLR11XX -DLR11XX_TRANSCEIVER -DUSE_LR11XX_CE -DENABLE_MODEM_GNSS_FEATURE -DRP2_103 -DREGION_AS_923 -DREGION_AU_915 -DREGION_CN_470 -DREGION_CN_470_RP_1_0 -DREGION_EU_868 -DREGION_IN_865 -DREGION_KR_920 -DREGION_RU_864 -DREGION_US_915 -DREGION_WW2G4 -DWW2G4_SINGLE_DATARATE -DSMTC_MULTICAST -DADD_SMTC_STREAM -DADD_SMTC_FILE_UPLOAD -DADD_SMTC_ALC_SYNC -DMODEM_HAL_DBG_TRACE=1 -DMODEM_HAL_DEEP_DBG_TRACE=0 -DMODEM_HAL_DBG_TRACE_RP=0 -DMODEM_HAL_DBG_TRACE_COLOR=0 -DTASK_EXTENDED_1 -DTASK_EXTENDED_2 -DLR11XX_DISABLE_WARNINGS -DMW_DBG_TRACE=1 -DMW_DBG_TRACE_COLOR=0 -DWM1110_TRACE_MAX_LENGTH=256
+wio_tracker_1110.build.ldscript=nrf52840_s140_v6.ld
+wio_tracker_1110.build.vid=0x2886
+wio_tracker_1110.build.pid=0x8055
+
+# SoftDevice Menu
+wio_tracker_1110.menu.softdevice.s140v6=S140 6.1.1
+wio_tracker_1110.menu.softdevice.s140v6.build.sd_name=s140
+wio_tracker_1110.menu.softdevice.s140v6.build.sd_version=6.1.1
+wio_tracker_1110.menu.softdevice.s140v6.build.sd_fwid=0x00B6
+
+# Print Port Menu
+wio_tracker_1110.menu.debug_output.serial=Serial (USB-CDC)
+wio_tracker_1110.menu.debug_output.serial.build.logger_flags=-DCFG_LOGGER=0
+wio_tracker_1110.menu.debug_output.serial1=Serial1 (UART)
+wio_tracker_1110.menu.debug_output.serial1.build.logger_flags=-DCFG_LOGGER=1
+wio_tracker_1110.menu.debug_output.rtt=Segger RTT
+wio_tracker_1110.menu.debug_output.rtt.build.logger_flags=-DCFG_LOGGER=2
+wio_tracker_1110.menu.debug_output.none=None
+wio_tracker_1110.menu.debug_output.none.build.logger_flags=-DCFG_LOGGER=3
+
+# Serial (USB-CDC)
+wio_tracker_1110.menu.usb_cdc.enable=Enable
+wio_tracker_1110.menu.usb_cdc.disable=Disable
+wio_tracker_1110.menu.usb_cdc.disable.build.flags.usb=

@@ -961,6 +961,8 @@ void AdafruitBluefruit::_setConnLed (bool on_off)
 //
 //--------------------------------------------------------------------+
 
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
+
 void Bluefruit_printInfo(void)
 {
   Bluefruit.printInfo();
@@ -1089,3 +1091,5 @@ void AdafruitBluefruit::printInfo(void)
 
   logger.println();
 }
+
+#endif
