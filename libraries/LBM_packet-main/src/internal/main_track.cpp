@@ -4,6 +4,20 @@
 #include <cstdlib>
 
 
+#include <Adafruit_LittleFS.h>
+#include <InternalFileSystem.h>
+#include <Adafruit_TinyUSB.h> // for Serial
+
+using namespace Adafruit_LittleFS_Namespace;
+
+#define FILENAME    "/group_id.txt"
+
+
+static lfs_t *lfs;
+static lfs_file_t file;
+
+
+
 uint8_t tracker_gps_scan_len = 0;
 uint8_t tracker_gps_scan_data[64] = { 0 };
 
@@ -276,6 +290,10 @@ void app_task_track_scan_send( void )
         for( uint8_t i = 0; i < GNSS_SCAN_GROUP_SIZE_MAX; i++ ) gnss_mw_custom_send_buffer_len[i] = 0;
         hal_mcu_trace_print( "GNSS raw group id: 0x%04x\r\n", track_gnss_group_id );
         track_gnss_group_id ++;
+        if(!gnss_group_id_write())
+        {
+            hal_mcu_trace_print( "save gnss raw group id error\r\n" );
+        }
     }
 #endif
 
@@ -368,7 +386,57 @@ bool app_task_track_gnss_is_busy( void )
     return track_gnss_busy;
 }
 
+
 bool app_task_track_wifi_is_busy( void )
 {
     return track_wifi_busy;
+}
+
+void gnss_group_id_init(void)
+{
+    uint32_t group_id_temp;
+    uint8_t len = sizeof(group_id_temp);
+    int ret = 0;
+    InternalFS.begin();
+    lfs = InternalFS._getFS();
+
+    ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDONLY);
+    // file existed
+    if ( ret == 0 )
+    {
+        uint8_t readlen;
+        len = lfs_file_read(lfs, &file, &group_id_temp, len);
+        lfs_file_close(lfs, &file);
+        track_gnss_group_id = group_id_temp;
+    }
+    else
+    {
+        ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDWR | LFS_O_CREAT);
+        if( ret == 0 )
+        {
+            group_id_temp = track_gnss_group_id;
+            lfs_file_rewind(lfs, &file);
+            lfs_file_write(lfs, &file, &group_id_temp, sizeof(group_id_temp));
+            lfs_file_close(lfs, &file);
+        }
+    }    
+}
+bool gnss_group_id_write(void)
+{
+    uint32_t group_id_temp;
+    int ret = 0;
+
+    group_id_temp = track_gnss_group_id;
+    ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDWR | LFS_O_CREAT);
+    if(ret != 0)
+    {
+        lfs_file_close(lfs, &file); 
+        return false;   
+    }
+    ret = lfs_file_read(lfs, &file, &group_id_temp, sizeof(group_id_temp));
+
+    ret = lfs_file_rewind(lfs, &file);
+    ret = lfs_file_write(lfs, &file, &group_id_temp, sizeof(group_id_temp));
+    lfs_file_close(lfs, &file);
+    return true;
 }

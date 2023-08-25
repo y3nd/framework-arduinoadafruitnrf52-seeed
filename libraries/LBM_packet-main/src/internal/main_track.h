@@ -80,4 +80,7 @@ void app_task_lora_load_utc_by_cache( void );
 bool app_task_track_wifi_is_busy( void );
 bool app_task_track_gnss_is_busy( void );
 
+void gnss_group_id_init(void);
+bool gnss_group_id_write(void);
+
 #endif

@@ -26,7 +26,7 @@ void mma7660_irq_callback(void)
 	MMA7660_DATA data;
 	accelemeter.getAllData(&data);
 	// hal_mcu_trace_print("mma7660_irq:%x\r\n",data.TILT);
-    state_all = state_all|TRACKER_STATE_BIT5_DEV_SHOCK;
+    state_all = state_all|TRACKER_STATE_BIT0_SOS;
 }
 
 
@@ -79,7 +79,7 @@ void sensor_datas_get(void)
         accelemeter.getAllData(&data);
         if(data.TILT&0x80)
         {
-            state_all = state_all|TRACKER_STATE_BIT5_DEV_SHOCK;
+            state_all = state_all|TRACKER_STATE_BIT0_SOS;
         }
     }
     adcvalue = analogRead(adcin);
