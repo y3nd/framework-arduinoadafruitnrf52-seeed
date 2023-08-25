@@ -46,7 +46,7 @@ There are two methods that you can use to install this BSP. We highly recommend 
 ### Optional (Core Development): Create Seeed nRF52 BSP file
 
 ```
-$ git clone -b wio_tracker_1110 --depth 1 --recurse-submodules https://github.com/SeeedJP/Adafruit_nRF52_Arduino Seeed_nRF52_Boards
+$ git clone --depth 1 --recurse-submodules https://github.com/SeeedJP/Adafruit_nRF52_Arduino Seeed_nRF52_Boards
 $ cd Seeed_nRF52_Boards
 $ ./extras/pack_release.sh
 ```
