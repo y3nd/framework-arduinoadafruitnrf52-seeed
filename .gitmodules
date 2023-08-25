@@ -16,3 +16,9 @@
 [submodule "libraries/Wio_Tracker_1110_Examples"]
 	path = libraries/Wio_Tracker_1110_Examples
 	url = https://github.com/SeeedJP/Wio_Tracker_1110_Examples
+[submodule "libraries/SdFat"]
+	path = libraries/SdFat
+	url = https://github.com/adafruit/SdFat
+[submodule "libraries/Adafruit_SPIFlash"]
+	path = libraries/Adafruit_SPIFlash
+	url = https://github.com/adafruit/Adafruit_SPIFlash
