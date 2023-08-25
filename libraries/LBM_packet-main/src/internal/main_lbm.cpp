@@ -12,16 +12,37 @@ uint8_t app_task_lora_tx_out = 0;
 uint32_t app_lora_sync_in_rtc_second = 0;
 uint32_t app_lora_sync_in_utc_second = 0;
 
+
 bool app_task_lora_tx_engine( void )
 {
     static uint8_t send_count = 0;
+    static uint32_t   app_task_lora_tx_toa = 0;
+    static uint32_t tx_last_timestemp = 0;
     smtc_modem_status_mask_t modem_status;
-    uint32_t tx_last_timestemp = smtc_modem_hal_get_time_in_s( );
+    smtc_modem_region_t cur_region;
+    uint8_t  dutycycle_enable = 0;
+
+    uint32_t tx_now_timestemp = smtc_modem_hal_get_time_in_ms( );
+
+    ASSERT_SMTC_MODEM_RC( smtc_modem_get_region(0, &cur_region));
+    
+    ASSERT_SMTC_MODEM_RC( smtc_modem_get_duty_cycle_enable(&dutycycle_enable));
+
+    if(dutycycle_enable == 1)
+    {
+        if((cur_region == SMTC_MODEM_REGION_EU_868) || (cur_region == SMTC_MODEM_REGION_RU_864))
+        {
+            if(tx_now_timestemp<(tx_last_timestemp+app_task_lora_tx_toa * 99))  //Limit dutycycle to less than 1% 
+            {
+                return false;
+            }
+        }
+    }
 
     uint8_t out = app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX;
+
     if( app_task_lora_tx_buffer_len[out] )
     {
-
         smtc_modem_get_status( 0, &modem_status );
         if(( modem_status & SMTC_MODEM_STATUS_JOINED ) == SMTC_MODEM_STATUS_JOINED 
             && app_lora_is_idle( ) 
@@ -31,6 +52,8 @@ bool app_task_lora_tx_engine( void )
             bool result = app_lora_send_frame( app_task_lora_tx_buffer[out], app_task_lora_tx_buffer_len[out], app_task_lora_tx_buffer_confirmed[out], false );
             if( result )
             {
+                ASSERT_SMTC_MODEM_RC( smtc_modem_get_toa_status(&app_task_lora_tx_toa,app_task_lora_tx_buffer_len[out] + 13));
+                tx_last_timestemp = smtc_modem_hal_get_time_in_ms( );
                 send_count++;
                 hal_mcu_trace_print( "app_task_lora_tx_out: %u\r\n", app_task_lora_tx_out );
                 if(send_count>=2)
