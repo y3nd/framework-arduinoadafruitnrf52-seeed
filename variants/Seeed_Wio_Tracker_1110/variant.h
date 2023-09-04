@@ -108,3 +108,5 @@ static const uint8_t SS = PINS_COUNT;           // No connection
 #define PIN_LR1110_IRQ          (2)             // WM1110 LR_DIO9
 #define PIN_GNSS_LNA            (37)
 #define PIN_POWER_SUPPLY_GROVE  (33)
+#define PIN_LIS3DH_INT1         (35)
+#define PIN_LIS3DH_INT2         (36)
