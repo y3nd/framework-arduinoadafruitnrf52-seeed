@@ -99,7 +99,7 @@ void scan_params_init(void)
     Bluefruit.setName("wio tracker");
 
     /* Set the LED interval for blinky pattern on BLUE LED */
-    Bluefruit.setConnLedInterval(250);
+    // Bluefruit.setConnLedInterval(250);
     /* Start Central Scanning
     * - Enable auto scan if disconnected
     * - Filter out packet with a min rssi
@@ -215,27 +215,27 @@ bool app_ble_get_results( uint8_t *result, uint8_t *size )
 
 void app_ble_display_results( void )
 {
-    hal_mcu_trace_print( "iBeacon: %d\r\n", ble_beacon_res_num );
+    printf( "iBeacon: %d\r\n", ble_beacon_res_num );
     for( uint8_t i = 0; i < ble_beacon_res_num; i ++ )
     {
-        hal_mcu_trace_print("%04x, ", ble_beacon_buf[ble_beacon_rssi_array[i]].company_id );
+        printf("%04x, ", ble_beacon_buf[ble_beacon_rssi_array[i]].company_id );
         for( uint8_t j = 0; j < 16; j++ )
         {
-            hal_mcu_trace_print( "%02x ", ble_beacon_buf[ble_beacon_rssi_array[i]].uuid[j] );
+            printf( "%02x ", ble_beacon_buf[ble_beacon_rssi_array[i]].uuid[j] );
         }
 
         uint16_t major = 0, minor = 0;
         memcpyr(( uint8_t *)( &major ), ( uint8_t *)( &ble_beacon_buf[ble_beacon_rssi_array[i]].major ), 2 );
         memcpyr(( uint8_t *)( &minor ), ( uint8_t *)( &ble_beacon_buf[ble_beacon_rssi_array[i]].minor ), 2 );
-        hal_mcu_trace_print(", %04x, ", major );
-        hal_mcu_trace_print("%04x, ", minor );
-        hal_mcu_trace_print("%d/%d dBm, ", ble_beacon_buf[ble_beacon_rssi_array[i]].rssi, ble_beacon_buf[ble_beacon_rssi_array[i]].rssi_ );
+        printf(", %04x, ", major );
+        printf("%04x, ", minor );
+        printf("%d/%d dBm, ", ble_beacon_buf[ble_beacon_rssi_array[i]].rssi, ble_beacon_buf[ble_beacon_rssi_array[i]].rssi_ );
 
         for( uint8_t j = 0; j < 5; j++ )
         {
-            hal_mcu_trace_print( "%02x:", ble_beacon_buf[ble_beacon_rssi_array[i]].mac[5 - j] );
+            printf( "%02x:", ble_beacon_buf[ble_beacon_rssi_array[i]].mac[5 - j] );
         }
-        hal_mcu_trace_print( "%02x\r\n", ble_beacon_buf[ble_beacon_rssi_array[i]].mac[0] );
+        printf( "%02x\r\n", ble_beacon_buf[ble_beacon_rssi_array[i]].mac[0] );
     }
 }
 

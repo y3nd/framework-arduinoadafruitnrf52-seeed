@@ -142,6 +142,8 @@ extern uint8_t mw_gnss_event_state;
 extern uint8_t app_lora_data_tx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
 extern uint8_t app_lora_data_tx_size;
 
+extern uint8_t app_lora_data_rx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
+extern uint8_t app_lora_data_rx_size;
 
 extern uint8_t adr_custom_list_eu868_default[16]; // SF12,SF12,SF12,SF11,SF11,SF11,SF10,SF10,SF10,SF9,SF9,SF9,SF8,SF8,SF7,SF7
 extern uint8_t adr_custom_list_us915_default[16]; // SF9,SF9,SF9,SF9,SF9,SF8,SF8,SF8,SF8,SF8,SF7,SF7,SF7,SF7,SF7
@@ -172,9 +174,9 @@ bool app_lora_is_idle( void );
 bool app_task_lora_clock_is_synch( void );
 bool app_task_radio_gnss_is_busy( void );
 bool app_task_radio_wifi_is_busy( void );
-void app_task_lora_clock_run_synch( void );
-void custom_lora_adr_compute( uint8_t min, uint8_t max, uint8_t *buf );
 
+void custom_lora_adr_compute( uint8_t min, uint8_t max, uint8_t *buf );
+void app_set_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf);
 
 #endif
 

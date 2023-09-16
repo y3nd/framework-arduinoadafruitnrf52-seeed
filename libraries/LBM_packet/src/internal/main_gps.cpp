@@ -14,7 +14,7 @@ uint8_t  gps_scan_status = 0;
 void app_gps_scan_init( void )
 {
     gps_scan_status = 1;
-    gnss_group_id_init();
+    // gnss_group_id_init();
 }
 
 bool app_gps_scan_start( void )
@@ -77,14 +77,14 @@ void app_gps_display_results( void )
 {
     if( gnss_mw_custom_send_buffer_num )
     {
-        hal_mcu_trace_print( "GNSS Raw:\r\n" );
+        printf( "GNSS Raw:\r\n" );
     }
     for( uint8_t i = 0; i < gnss_mw_custom_send_buffer_num; i++ )
     {
         for( uint8_t j = 0; j < gnss_mw_custom_send_buffer_len[i]; j++ )
         {
-            hal_mcu_trace_print( "%02X", gnss_mw_custom_send_buffer[i][j] );
+            printf( "%02X", gnss_mw_custom_send_buffer[i][j] );
         }
-        hal_mcu_trace_print( "\r\n" );
+        printf( "\r\n" );
     }
 }

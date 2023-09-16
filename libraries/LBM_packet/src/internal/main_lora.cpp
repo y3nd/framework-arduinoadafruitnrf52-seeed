@@ -29,6 +29,8 @@ uint8_t app_lora_data_tx_size = 0;
 
 uint32_t app_lora_tx_recent_time = 0;
 
+uint8_t app_lora_data_rx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
+uint8_t app_lora_data_rx_size = 0;
 
 /*!
  * @brief First time sync status for application startup
@@ -154,14 +156,52 @@ bool app_task_radio_wifi_is_busy( void )
     return wifi_mw_custom_get_scan_busy();
 }
 
-void app_task_lora_clock_run_synch( void )
+
+
+void app_set_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf)
 {
-    smtc_modem_status_mask_t modem_status;
-    smtc_modem_get_status( 0, &modem_status );
-    if(( modem_status & SMTC_MODEM_STATUS_JOINED ) == SMTC_MODEM_STATUS_JOINED )
+    switch(REGION)
     {
-        hal_mcu_trace_print( "start sync clock at %u\r\n", smtc_modem_hal_get_time_in_ms( ));
-        smtc_modem_time_stop_sync_service( stack_id );
-        smtc_modem_time_start_sync_service( stack_id, SMTC_MODEM_TIME_ALC_SYNC );
+        case SMTC_MODEM_REGION_EU_868:
+            memcpy(buf,adr_custom_list_eu868_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_AS_923_GRP1:
+        case SMTC_MODEM_REGION_AS_923_GRP2:
+        case SMTC_MODEM_REGION_AS_923_GRP3:
+        case SMTC_MODEM_REGION_AS_923_GRP4:
+            memcpy(buf,adr_custom_list_as923_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_US_915:
+            memcpy(buf,adr_custom_list_us915_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_AU_915:
+            memcpy(buf,adr_custom_list_au915_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_IN_865:
+            memcpy(buf,adr_custom_list_in865_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_RU_864:
+            memcpy(buf,adr_custom_list_ru864_default,16);
+            break;
+
+        case SMTC_MODEM_REGION_KR_920:
+            memcpy(buf,adr_custom_list_kr920_default,16);
+            break;
+        
+        case SMTC_MODEM_REGION_CN_470_RP_1_0:
+        case SMTC_MODEM_REGION_WW2G4:
+        case SMTC_MODEM_REGION_CN_470:
+
+        default:
+        
+            break;
     }
+
+
 }
+

@@ -94,16 +94,17 @@ bool app_wifi_get_results( uint8_t* result, uint8_t *size )
 
 void app_wifi_display_results( void )
 {
-    hal_mcu_trace_print( "Number of results: %u\r\n", wifi_results.nbr_results );
+    printf( "Number of results: %u\r\n", wifi_results.nbr_results );
     for( uint8_t i = 0; i < wifi_results.nbr_results; i++ )
     {
         for( uint8_t j = 0; j < WIFI_AP_ADDRESS_SIZE; j++ )
         {
             printf( "%02X ", wifi_results.results[i].mac_address[j] );
         }
-        hal_mcu_trace_print( "Channel: %d, ", wifi_results.results[i].channel );
-        hal_mcu_trace_print( "Type: %d, ", wifi_results.results[i].type );
-        hal_mcu_trace_print( "RSSI: %d\r\n", wifi_results.results[i].rssi );
+        printf( "\r\n");
+        printf( "Channel: %d, ", wifi_results.results[i].channel );
+        printf( "Type: %d, ", wifi_results.results[i].type );
+        printf( "RSSI: %d\r\n", wifi_results.results[i].rssi );
     }
 }
 
