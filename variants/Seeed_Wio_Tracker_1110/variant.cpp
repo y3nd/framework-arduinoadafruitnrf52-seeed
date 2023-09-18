@@ -69,7 +69,11 @@ void initVariant()
   digitalWrite(PIN_GNSS_LNA, LOW);
   pinMode(PIN_GNSS_LNA, OUTPUT);
 
+#if defined(POWER_SUPPLY_GROVE) && POWER_SUPPLY_GROVE == 1
+  digitalWrite(PIN_POWER_SUPPLY_GROVE, HIGH);
+#else
   digitalWrite(PIN_POWER_SUPPLY_GROVE, LOW);
+#endif
   pinMode(PIN_POWER_SUPPLY_GROVE, OUTPUT);
 
   ledOff(LED_BUILTIN);
