@@ -112,20 +112,6 @@ void hal_mcu_critical_section_begin( uint32_t* mask );
  */
 void hal_mcu_critical_section_end( uint32_t* mask );
 
-/*!
- * @brief Disable irq at core side
- */
-void hal_mcu_disable_irq( void );
-
-/*!
- * @brief Enable irq at core side
- */
-void hal_mcu_enable_irq( void );
-
-/*!
- * @brief Initializes HAL used MCU
- */
-void hal_mcu_init( void );
 
 /*!
  * @brief Resets the MCU
@@ -140,25 +126,12 @@ void hal_mcu_reset( void );
 void hal_mcu_wait_us( const int32_t microseconds );
 
 /*!
- * Sets the MCU in sleep mode for the given number of milliseconds.
+ * @brief Waits for delay milliseconds
  *
- * @param[in] milliseconds Number of milliseconds to stay in sleep mode
+ * @param [in] ms Delay to wait in milliseconds
  */
-void hal_mcu_set_sleep_for_ms( const int32_t milliseconds );
+void hal_mcu_wait_ms( const int32_t ms );
 
-/*!
- * @brief Get Vref intern from the MCU in mV
- *
- * @returns Vref In in mV.
- */
-uint16_t hal_mcu_get_vref_level( void );
-
-/*!
- * @brief Get Temperature intern from the MCU in Celsius degree
- *
- * @returns Temperature in Celsius degree.
- */
-int16_t hal_mcu_get_temperature( void );
 
 /*!
  * @brief Prints debug trace
@@ -167,36 +140,6 @@ int16_t hal_mcu_get_temperature( void );
  */
 void hal_mcu_trace_print( const char* fmt, ... );
 
-/*!
- * @brief Suspend low power process and avoid looping on it
- */
-void hal_mcu_disable_low_power_wait( void );
-
-/*!
- * @brief Enable low power process
- */
-void hal_mcu_enable_low_power_wait( void );
-
-/*!
- * @brief Enable/Disable partial sleep
- *
- * @param [in] enable Activate the partial sleep
- */
-void hal_mcu_partial_sleep_enable( bool enable );
-
-/*!
- * @brief Wait n ms defined by the user
- *
- * @param [in] delay_ms value in ms
- */
-void hal_mcu_delay_ms( uint32_t delay_ms );
-
-/*!
- * @brief Wait n ms defined by the user
- *
- * @returns return tick.
- */
-uint32_t hal_mcu_get_tick( void );
 
 #ifdef __cplusplus
 }
