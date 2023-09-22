@@ -117,27 +117,79 @@ void app_task_user_sensor_data_send( void )
 
 smtc_modem_region_t sensecap_lorawan_region(void)
 {
-    switch(app_param.lora_info.ActiveRegion)
-    {
-        case   LORAMAC_REGION_AU915:
-            return SMTC_MODEM_REGION_AU_915;
-        case   LORAMAC_REGION_CN470:
-            return SMTC_MODEM_REGION_CN_470;            
-        case   LORAMAC_REGION_EU868:
-            return SMTC_MODEM_REGION_EU_868;
-        case   LORAMAC_REGION_US915:
-            return SMTC_MODEM_REGION_US_915;
-        case   LORAMAC_REGION_RU864:
-            return SMTC_MODEM_REGION_RU_864;
-        case   LORAMAC_REGION_KR920:
-            return SMTC_MODEM_REGION_KR_920;
-        case   LORAMAC_REGION_IN865:
-            return SMTC_MODEM_REGION_IN_865;
-        default:
-            break;
+    smtc_modem_region_t lorawan_region = SMTC_MODEM_REGION_EU_868; // can be change by user
+    uint8_t lorawan_region_sub_band = 2; // can be change by user
 
+    switch( app_param.lora_info.ActiveRegion )
+    {
+        case 0:
+        case 15:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_GRP1;
+        break;
+
+        case 16:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_GRP2;
+        break;
+
+        case 17:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_GRP3;
+        break;
+
+        case 18:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_GRP4;
+        break;
+        
+        case 1:
+            lorawan_region = SMTC_MODEM_REGION_AU_915;
+        break;
+        
+        case 5:
+            lorawan_region = SMTC_MODEM_REGION_EU_868;
+        break;
+        
+        case 6:
+            lorawan_region = SMTC_MODEM_REGION_KR_920;
+        break;
+    
+        case 7:
+            lorawan_region = SMTC_MODEM_REGION_IN_865;
+        break;
+        
+        case 8:
+            lorawan_region = SMTC_MODEM_REGION_US_915;
+        break;
+    
+        case 9:
+            lorawan_region = SMTC_MODEM_REGION_RU_864;
+        break;
+        
+        case 10:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_HELIUM_1;
+        break;
+        
+        case 11:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_HELIUM_2;
+        break;
+        
+        case 12:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_HELIUM_3;
+        break;
+        
+        case 13:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_HELIUM_4;
+        break;
+        
+        case 14:
+            lorawan_region = SMTC_MODEM_REGION_AS_923_HELIUM_1B;
+        break;
+        
+        default:
+        break;
     }
-    return SMTC_MODEM_REGION_EU_868;
+    
+    lorawan_region_sub_band =  app_param.lora_info.ChannelGroup + 1;
+
+    return lorawan_region;
 }
 
 

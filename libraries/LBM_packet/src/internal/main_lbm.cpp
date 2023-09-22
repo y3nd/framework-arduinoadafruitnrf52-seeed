@@ -326,7 +326,7 @@ bool app_task_lora_save_tx_data( uint8_t *buf, uint8_t len )
     }
 
     ret = write_position_msg(  );
-    if( ret ) hal_mcu_trace_print( "Save off-line data ok\r\n" );
+    if( ret == 0 ) hal_mcu_trace_print( "Save off-line data ok\r\n" );
     else hal_mcu_trace_print( "Save off-line data fail\r\n" );
     return result = ret == 0 ? true:false;
 }

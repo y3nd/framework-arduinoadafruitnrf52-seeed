@@ -45,3 +45,4 @@
 [submodule "libraries/Wio_Tracker_1110_Examples"]
 	path = libraries/Wio_Tracker_1110_Examples
 	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
+	branch = dev/wenzy

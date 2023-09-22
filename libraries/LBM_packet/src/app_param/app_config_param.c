@@ -51,7 +51,7 @@ gnss_group_param_t app_gnss_group_param=
 
 append_param_t app_append_param = 
 {
-    .Platform = IOT_PLATFORM_SENSECAP_TTN,
+    .Platform = IOT_PLATFORM_SENSECAP_TTN,         // 0: SENSECAP_TTN, 1: OTHER, 2: Helium, 3: TTN, 4:SENSECAP_HELIUM      
     .Retry = 1,
     .cache_en = true,
     .position_interval = 5,
