@@ -56,8 +56,10 @@ float UV_val = 0.0;
 uint16_t sound_val = 0;
 uint16_t ultrasonic_distance_cm = 0;
 uint32_t dps310_pressure_val = 0;
-
-
+    
+volatile uint8_t lis3dhtr_irq_flag = 0;
+uint8_t move_trig_position = 0;
+uint8_t move_trig_collect = 0;
 //sensor handle
 static SensirionI2CSht4x sht4x;
 static LIS3DHTR<TwoWire> LIS; 
@@ -78,12 +80,13 @@ static constexpr int relay_pin    = D2;
 //analog pin
 static constexpr int sound_adc_pin    = A0;
 
-
-
 //irq callback----------------------------------------------------
 void lis3dhtr_irq_callback(void)
 {
     lis3dhtr_irq_count ++;
+    lis3dhtr_irq_flag = 1;
+    move_trig_position = 1;
+    move_trig_collect = 1;
 }
 
 //grove power init -----------------------------------------------------
@@ -285,12 +288,6 @@ bool sht4x_data_get(float* temperature, float* humidity)    // 11ms
         return false;
     iic_mutex_status = true;
 
-#if(SENSOR_HOT_SWAPPABLE_DETECT == 1)
-    if(sht4x_available_detect())
-    {
-        sensor_sht4x_init();          
-    }  
-#endif
     if(sensor_types&sht4x_sensor_type)
     {
         uint16_t error;    
@@ -324,13 +321,6 @@ bool lis3dhtr_data_get(float* x, float* y, float* z)
         return false;
     iic_mutex_status = true;
 
-#if(SENSOR_HOT_SWAPPABLE_DETECT == 1)
-    if(lis3dhtr_available_detect())
-    {
-        sensor_lis3dhtr_init();          
-    }  
-#endif
-
     if(sensor_types&lis3dhtr_sensor_type)
     {
         uint8_t flag = 0;
@@ -339,7 +329,7 @@ bool lis3dhtr_data_get(float* x, float* y, float* z)
         if(irq_count != lis3dhtr_irq_count)
         {
             irq_count = lis3dhtr_irq_count;
-            state_all = state_all|TRACKER_STATE_BIT2_MOT_BEG;
+            state_all = state_all|TRACKER_STATE_BIT5_DEV_SHOCK;
             app_task_track_motion_index_update();
         }
         else

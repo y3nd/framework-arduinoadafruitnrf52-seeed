@@ -1,9 +1,9 @@
-
 #ifndef _MAIN_SENSOR_H_
 #define _MAIN_SENSOR_H_
 
 #include <stdint.h>
 #include <stdbool.h>
+
 
 
 
@@ -30,26 +30,29 @@
 
 
 
-extern float sht4x_temperature;
-extern float sht4x_humidity;
-extern float lis3dhtr_x;
-extern float lis3dhtr_y;
-extern float lis3dhtr_z;
-extern int32_t sgp41_voc_index;
-extern float UV_val;
-extern uint16_t sound_val;
-extern uint16_t ultrasonic_distance_cm;
-extern uint32_t dps310_pressure_val;
+extern float sht4x_temperature; // sht41 temperture data
+extern float sht4x_humidity;    // sht41 humidity data
+extern float lis3dhtr_x;    // lis3dhtr X-axis data
+extern float lis3dhtr_y;    // lis3dhtr Y-axis data
+extern float lis3dhtr_z;    // lis3dhtr Z-axis data
+extern int32_t sgp41_voc_index;// sgp41 voc index data
+extern float UV_val;    // si1151 uv data
+extern uint16_t sound_val;  // sound sensor data
+extern uint16_t ultrasonic_distance_cm; // ultrasonic distance sensor data
+extern uint32_t dps310_pressure_val;    // dps310 Atmospheric pressure data
+extern volatile uint8_t lis3dhtr_irq_flag;  // lis3dhtr interrupt trigger flag
+extern uint8_t move_trig_position;  // lis3dhtr interrupt trigger position flag
+extern uint8_t move_trig_collect;   // lis3dhtr interrupt trigger collect sensor data flag
 
 
-extern uint8_t factory_sensor_data_len;
-extern uint8_t factory_sensor_data[20];
+extern uint8_t factory_sensor_data_len;   // Manufacturer default sensor data len
+extern uint8_t factory_sensor_data[20];   // Manufacturer default sensor data buffer
 
-extern uint8_t user_sensor_data_len;
-extern uint8_t user_sensor_data[40];
+extern uint8_t user_sensor_data_len;    // user sensor data len
+extern uint8_t user_sensor_data[40];    // user sensor data buffer
 
-extern uint16_t sound_sample_index;
-extern uint16_t sound_average_data;
+extern uint16_t sound_sample_index; // sound sensor sample count index      
+extern uint16_t sound_average_data; // sound sensor average data
 
 
 

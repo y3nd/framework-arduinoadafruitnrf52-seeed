@@ -20,6 +20,8 @@
 #include "internal/main_track.h"
 #include "internal/main_wifi.h"
 #include "internal/main_gps.h"
+#include "internal/main_almanac.h"
+
 
 #include "common/apps_modem_common.h"
 #include "common/smtc_hal_dbg_trace.h"
@@ -43,4 +45,10 @@
 #include "app_param/app_config_param.h"
 
 #include "app_param/default_config_datas.h"
+#include "app_param/key_value_fds.h"
+#include "app_param/user_stored_data.h"
+#include "app_param/at.h"
+#include "app_param/at_command.h"
+
+
 

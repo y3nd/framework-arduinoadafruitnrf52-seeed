@@ -27,8 +27,6 @@ uint8_t adr_custom_list_region[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 uint8_t app_lora_data_tx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
 uint8_t app_lora_data_tx_size = 0;
 
-uint32_t app_lora_tx_recent_time = 0;
-
 uint8_t app_lora_data_rx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
 uint8_t app_lora_data_rx_size = 0;
 
@@ -120,7 +118,6 @@ bool app_lora_send_frame( uint8_t* buffer, uint8_t length, bool tx_confirmed, bo
 
             if( result == SMTC_MODEM_RC_OK )
             {
-                 app_lora_tx_recent_time = smtc_modem_hal_get_time_in_ms( );
                 return true;
             }
             else return false;
@@ -158,7 +155,7 @@ bool app_task_radio_wifi_is_busy( void )
 
 
 
-void app_set_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf)
+void app_get_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf)
 {
     switch(REGION)
     {

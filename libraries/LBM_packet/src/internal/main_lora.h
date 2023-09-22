@@ -1,11 +1,5 @@
-
-#ifndef _MAIN_TASK_H_
-#define _MAIN_TASK_H_
-
-/*
- * -----------------------------------------------------------------------------
- * --- DEPENDENCIES ------------------------------------------------------------
- */
+#ifndef _MAIN_LORA_H_
+#define _MAIN_LORA_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -22,80 +16,24 @@
 
 #include "lbm/smtc_modem_api/smtc_modem_utilities.h"
 
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC MACROS -----------------------------------------------------------
- */
+
 #define MODEM_EXAMPLE_ASSISTANCE_POSITION_LAT_DEFAULT ( 22.576814 )
 #define MODEM_EXAMPLE_ASSISTANCE_POSITION_LONG_DEFAULT ( 113.922068 )
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC CONSTANTS --------------------------------------------------------
- */
 
-/*
- * -----------------------------------------------------------------------------
- * --- PRIVATE MACROS-----------------------------------------------------------
- */
 
-/*!
- * @brief Stringify constants
- */
 #define xstr( a ) str( a )
 #define str( a ) #a
 
-/*
- * -----------------------------------------------------------------------------
- * --- PRIVATE CONSTANTS -------------------------------------------------------
- */
-/**
- * @brief Duration in second after last ALC sync response received to consider the local clock time invalid
- *
- * Set time valid for 1 day (to be fine tuned depending on board properties)
- */
-#define APP_ALC_TIMING_INVALID ( 3600 * 24 )
 
-/**
- * @brief Interval in second between two consecutive ALC sync requests
- *
- * 3 time sync requests per day
- */
-#define APP_ALC_TIMING_INTERVAL ( APP_ALC_TIMING_INVALID / 3 )
+#define LORAWAN_APP_PORT 5          //The default LoRaWAN application port for uploading data to the sensecap platform 
 
-#define APP_LBM_IRQ_ERROR_CHECK 0
+#define LORAWAN_APP_DATA_MAX_SIZE 242       //Maximum lora data length
 
-/*!
- * @brief Defines the application data transmission duty cycle. 60s, value in [s].
- */
-#define APP_TX_DUTYCYCLE 60
-
-/*!
- * @brief LoRaWAN application port
- */
-#define LORAWAN_APP_PORT 5
-
-/*!
- * @brief User application data buffer size
- */
-#define LORAWAN_APP_DATA_MAX_SIZE 242
-
-/*
- * -----------------------------------------------------------------------------
- * --- LoRaWAN Configuration ---------------------------------------------------
- */
-
-/*!
- * @brief LoRaWAN confirmed messages
- */
-#define LORAWAN_CONFIRMED_MSG_ON false
-
-/*!
- * @brief Default datarate
- *
- * @remark See @ref smtc_modem_adr_profile_t
- */
 #define LORAWAN_DEFAULT_DATARATE SMTC_MODEM_ADR_PROFILE_CUSTOM
 
+
+//Default lora data DR Control 
+//It must ensure that the minimum device can send 51 bytes of data,So that no subcontracting is required to send data
 #define LORAWAN_EU868_DR_MIN    0
 #define LORAWAN_EU868_DR_MAX    6
 
@@ -117,34 +55,26 @@
 #define LORAWAN_RU864_DR_MIN    0
 #define LORAWAN_RU864_DR_MAX    6
 
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC TYPES ------------------------------------------------------------
- */
-extern uint8_t stack_id;
 
-// extern ralf_t* modem_radio;
+extern uint8_t stack_id;    // Lora stack id
 
+extern uint8_t app_lora_port;   // lora data sending port
 
-extern uint8_t app_lora_port;
-
-
-extern bool adr_user_enable;
-
-
-extern float app_task_gnss_aiding_position_latitude;
+//aiding position coordinate
+extern float app_task_gnss_aiding_position_latitude; 
 extern float app_task_gnss_aiding_position_longitude;
 
-extern uint8_t adr_custom_list_region[16];
+extern uint8_t adr_custom_list_region[16];  // custom adr lists of different regions 
 
-extern uint32_t app_lora_tx_recent_time;
-extern uint8_t mw_gnss_event_state;
-extern uint8_t app_lora_data_tx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
-extern uint8_t app_lora_data_tx_size;
+extern uint8_t mw_gnss_event_state;         // gnss event see gnss_mw_event_type_t
+extern uint8_t app_lora_data_tx_buffer[LORAWAN_APP_DATA_MAX_SIZE];  //lora tx buffer
+extern uint8_t app_lora_data_tx_size;   //lora tx buffer size
 
-extern uint8_t app_lora_data_rx_buffer[LORAWAN_APP_DATA_MAX_SIZE];
-extern uint8_t app_lora_data_rx_size;
+extern uint8_t app_lora_data_rx_buffer[LORAWAN_APP_DATA_MAX_SIZE];  //lora rx buffer
+extern uint8_t app_lora_data_rx_size;   //lora rx buffer size
 
+
+//default adr list for different regions 
 extern uint8_t adr_custom_list_eu868_default[16]; // SF12,SF12,SF12,SF11,SF11,SF11,SF10,SF10,SF10,SF9,SF9,SF9,SF8,SF8,SF7,SF7
 extern uint8_t adr_custom_list_us915_default[16]; // SF9,SF9,SF9,SF9,SF9,SF8,SF8,SF8,SF8,SF8,SF7,SF7,SF7,SF7,SF7
 extern uint8_t adr_custom_list_au915_default[16]; // SF9,SF9,SF9,SF9,SF9,SF8,SF8,SF8,SF8,SF8,SF7,SF7,SF7,SF7,SF7
@@ -154,29 +84,83 @@ extern uint8_t adr_custom_list_in865_default[16]; // SF12,SF12,SF12,SF11,SF11,SF
 extern uint8_t adr_custom_list_ru864_default[16]; // SF12,SF12,SF12,SF11,SF11,SF11,SF10,SF10,SF10,SF9,SF9,SF9,SF8,SF8,SF7,SF7
 
 
-extern volatile bool is_first_time_sync;
+extern volatile bool is_first_time_sync;    // the time synchronization flag
 
 
-extern wifi_mw_event_data_scan_done_t wifi_results;
+extern wifi_mw_event_data_scan_done_t wifi_results;     //wifi result
 
-
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC FUNCTIONS PROTOTYPES ---------------------------------------------
+/**
+ * app_lora_set_port() - Set LoRaWAN application port
+ *
+ * @param port  port
+ *
  */
-
-
 void app_lora_set_port( uint8_t port );
+
+/**
+ * app_lora_send_frame() - Send lora data frame
+ *
+ * @param buffer  Data buffer
+ *
+ * @param length  Data length 
+ *
+ * @param tx_confirmed  Whether need confirm
+ *
+ * @param emergency  Whether need emergency
+ *
+ */
 bool app_lora_send_frame( uint8_t* buffer, uint8_t length, bool tx_confirmed, bool emergency );
 
+/**
+ * app_lora_is_idle() - Check whether lora is idle
+ *
+ * @return  true: idle, false: busy
+ */
 bool app_lora_is_idle( void );
 
+/**
+ * app_task_lora_clock_is_synch() - Check whether time synchronization is complete
+ *
+ * @return  true: success, false: fail
+ */
 bool app_task_lora_clock_is_synch( void );
+
+/**
+ * app_task_radio_gnss_is_busy() - Check whether gnss scanning
+ *
+ * @return  true: busy, false: idle
+ */
 bool app_task_radio_gnss_is_busy( void );
+
+/**
+ * app_task_radio_wifi_is_busy() - Check whether Wifi scanning
+ *
+ * @return  true: idle, false: busy
+ */
 bool app_task_radio_wifi_is_busy( void );
 
+/**
+ * custom_lora_adr_compute() - Generate an adr list based on the DR Range
+ *
+ * @param min   DR min
+ *
+ * @param max   DR max
+ *
+ * @param buf   adr list 
+ *
+ * @return  true: idle, false: busy
+ */
 void custom_lora_adr_compute( uint8_t min, uint8_t max, uint8_t *buf );
-void app_set_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf);
+
+/**
+ * app_get_profile_list_by_region() - Get the default adr list of the region
+ *
+ * @param REGION   region
+ *
+ * @param buf   adr list
+ *
+ */
+void app_get_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf);
 
 #endif
 

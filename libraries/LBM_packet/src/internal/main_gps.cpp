@@ -14,7 +14,7 @@ uint8_t  gps_scan_status = 0;
 void app_gps_scan_init( void )
 {
     gps_scan_status = 1;
-    // gnss_group_id_init();
+
 }
 
 bool app_gps_scan_start( void )

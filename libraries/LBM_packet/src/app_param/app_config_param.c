@@ -31,11 +31,30 @@ adding_pos_param_t app_adding_pos_param =
     .latitude = 22577064,
     .longitude = 113922456,
 };
+
+pos_msg_file_id_t pos_msg_file_id = 
+{
+  .reboot_cnt = 0,
+  .log_cnt = 0,
+}
+;
+pos_msg_param_t pos_msg_param =
+{
+    0
+};
+
 gnss_group_param_t app_gnss_group_param=
 {
     .group_id = 0,
 };
 
 
-
+append_param_t app_append_param = 
+{
+    .Platform = IOT_PLATFORM_SENSECAP_TTN,
+    .Retry = 1,
+    .cache_en = true,
+    .position_interval = 5,
+    .sample_interval = 5,
+};
 
