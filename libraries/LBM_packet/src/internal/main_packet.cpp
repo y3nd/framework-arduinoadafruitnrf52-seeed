@@ -5,11 +5,7 @@
 
 #include "app_param/default_config_datas.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// Variables
 
-uint8_t app_lora_packet_buffer[LORAWAN_APP_DATA_MAX_SIZE] = { 0 };
-uint8_t app_lora_packet_len = 0;
 
 uint8_t factory_sensor_temp_len = 0;
 uint8_t factory_sensor_data_temp[64] = { 0 };
@@ -26,7 +22,12 @@ void memcpyr( uint8_t *dst, const uint8_t *src, uint16_t size )
 void default_param_load(void)
 {
     is_first_time_sync = false;
-    lorawan_param_init();
+    param_init_func();
+
+    app_task_lora_tx_cache = app_append_param.cache_en;
+    send_retry_type = app_append_param.Retry;
+
+
 }
 
 
@@ -112,3 +113,36 @@ void app_task_user_sensor_data_send( void )
 
     state_all = 0;
 }
+
+
+smtc_modem_region_t sensecap_lorawan_region(void)
+{
+    switch(app_param.lora_info.ActiveRegion)
+    {
+        case   LORAMAC_REGION_AU915:
+            return SMTC_MODEM_REGION_AU_915;
+        case   LORAMAC_REGION_CN470:
+            return SMTC_MODEM_REGION_CN_470;            
+        case   LORAMAC_REGION_EU868:
+            return SMTC_MODEM_REGION_EU_868;
+        case   LORAMAC_REGION_US915:
+            return SMTC_MODEM_REGION_US_915;
+        case   LORAMAC_REGION_RU864:
+            return SMTC_MODEM_REGION_RU_864;
+        case   LORAMAC_REGION_KR920:
+            return SMTC_MODEM_REGION_KR_920;
+        case   LORAMAC_REGION_IN865:
+            return SMTC_MODEM_REGION_IN_865;
+        default:
+            break;
+
+    }
+    return SMTC_MODEM_REGION_EU_868;
+}
+
+
+
+
+
+
+

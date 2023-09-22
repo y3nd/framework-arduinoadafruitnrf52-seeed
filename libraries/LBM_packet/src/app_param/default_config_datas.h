@@ -14,6 +14,11 @@ int default_config_write (uint8_t *buffer, uint8_t size);
 bool save_Config(void);
 void get_Config(void);
 uint8_t crc8(uint8_t *data, uint8_t data_len);
+
+
+
+
+
 #endif
 
 

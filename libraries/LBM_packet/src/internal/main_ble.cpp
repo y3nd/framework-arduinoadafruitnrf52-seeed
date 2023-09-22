@@ -5,14 +5,28 @@
 
 #include <bluefruit.h>
 
+uint8_t ble_scan_status = 0;    
 
-
-uint8_t ble_scan_status = 0;
-
-uint8_t ble_beacon_res_num = 0;
+uint8_t ble_beacon_res_num = 0; 
 BleBeacons_t ble_beacon_buf[BLE_BEACON_BUF_MAX] = { 0 };
 uint8_t ble_beacon_rssi_array[BLE_BEACON_BUF_MAX] = { 0 };
 
+
+// BLE adv Service
+const uint16_t TRACKER_UUID1 = 0x2886;
+const uint16_t TRACKER_UUID2 = 0xA886;
+
+BLEUuid uuid1 = BLEUuid(TRACKER_UUID1);
+BLEUuid uuid2 = BLEUuid(TRACKER_UUID2);
+BLEComm blecomm;
+
+volatile uint8_t ble_connect_status = 0;    //0: none  1:init 2:connect 3:disconnect
+
+volatile bool notify_status = false;
+char ble_rec_data_buf[244] = {0};
+uint8_t ble_rec_data_len = 0;
+volatile bool ble_rec_done = false;
+static char  ble_tx_buf[244];
 
 
 
@@ -92,11 +106,18 @@ static void ble_scanner_evt_handler( ble_gap_evt_adv_report_t* report )
 
 void scan_params_init(void)
 {
+    char adv_device_name[24] = {0};
+    hexTonum((unsigned char *)adv_device_name, app_param.hardware_info.Sn, 9);
+
+    uint8_t templen = strlen("-1110");
+    
+    memcpy(&adv_device_name[18],"-1110",templen); 
+
     Bluefruit.begin(0, 1);
     Bluefruit.setTxPower(4);    // Check bluefruit.h for supported values
 
     /* Set the device name */
-    Bluefruit.setName("wio tracker");
+    Bluefruit.setName(adv_device_name);
 
     /* Set the LED interval for blinky pattern on BLUE LED */
     // Bluefruit.setConnLedInterval(250);
@@ -238,5 +259,158 @@ void app_ble_display_results( void )
         printf( "%02x\r\n", ble_beacon_buf[ble_beacon_rssi_array[i]].mac[0] );
     }
 }
+
+
+void app_ble_adv_init( void )
+{
+    adv_params_init();
+}
+
+
+void adv_params_init(void)
+{
+    char adv_device_name[24] = {0};
+    hexTonum((unsigned char *)adv_device_name, app_param.hardware_info.Sn, 9);
+
+    uint8_t templen = strlen("-1110");
+
+    memcpy(&adv_device_name[18],"-1110",templen); 
+
+    // Config the peripheral connection with maximum bandwidth 
+    // more SRAM required by SoftDevice
+    // Note: All config***() function must be called before begin()
+    Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
+
+    Bluefruit.begin();
+    Bluefruit.setTxPower(4);    // Check bluefruit.h for supported values
+    Bluefruit.setName(adv_device_name);
+
+
+    Bluefruit.Periph.setConnectCallback(connect_callback);
+    Bluefruit.Periph.setDisconnectCallback(disconnect_callback);
+
+    // Configure and Start BLE Uart Service
+    blecomm.begin();
+
+    // Set up and start advertising
+    startAdv();
+    memset(ble_rec_data_buf,0,244);
+    ble_rec_data_len = 0;
+    ble_rec_done = false;
+
+    ble_connect_status = 1;
+}
+
+void startAdv(void)
+{
+
+    Bluefruit.Advertising.addUuid(uuid1,uuid2);
+    Bluefruit.Advertising.addName();
+
+    /* Start Advertising
+    * - Enable auto advertising if disconnected
+    * - Interval:  fast mode = 20 ms, slow mode = 152.5 ms
+    * - Timeout for fast mode is 30 seconds
+    * - Start(timeout) with timeout = 0 will advertise forever (until connected)
+    * 
+    * For recommended advertising interval
+    * https://developer.apple.com/library/content/qa/qa1931/_index.html   
+    */
+    Bluefruit.Advertising.restartOnDisconnect(true);
+    Bluefruit.Advertising.setInterval(32, 244);    // in unit of 0.625 ms
+    Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
+    Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds  
+}
+
+// callback invoked when central connects
+void connect_callback(uint16_t conn_handle)
+{
+    // Get the reference to current connection
+    BLEConnection* connection = Bluefruit.Connection(conn_handle);
+    char central_name[32] = { 0 };
+    ble_gap_addr_t ble_gap_addr;
+    ble_gap_addr = connection->getPeerAddr(); 
+    connection->getPeerName(central_name, sizeof(central_name));
+    hal_mcu_trace_print("Connected to %s\r\n",central_name);
+    hal_mcu_trace_print("mac:%02x:%02x:%02x:%02x:%02x:%02x\r\n",ble_gap_addr.addr[5],ble_gap_addr.addr[4],ble_gap_addr.addr[3],\
+                                            ble_gap_addr.addr[2],ble_gap_addr.addr[1],ble_gap_addr.addr[0]);
+
+    // request to update data length
+    connection->requestDataLengthUpdate();
+
+    // // request mtu exchange
+    // connection->requestMtuExchange(247);
+
+    ble_connect_status = 2;                   
+}
+
+bool bleMtuExchange(void)
+{
+    BLEConnection* connection = Bluefruit.Connection(0);
+    // request to update data length
+    connection->requestDataLengthUpdate();
+
+    // request to update data length
+    bool ret = connection->requestDataLengthUpdate();
+    return ret;
+}
+
+
+
+/**
+ * Callback invoked when a connection is dropped
+ * @param conn_handle connection where this event happens
+ * @param reason is a BLE_HCI_STATUS_CODE which can be found in ble_hci.h
+ */
+void disconnect_callback(uint16_t conn_handle, uint8_t reason)
+{
+    (void) conn_handle;
+    (void) reason;
+
+    hal_mcu_trace_print("Disconnected, reason = 0x%0x",reason);
+    ble_connect_status = 3;    
+}
+
+
+static void vprint(const char *fmt, va_list argp) 
+{
+    uint8_t ble_tx_len = 0;
+    
+    notify_status = blecomm.notifyEnabled();
+    if(notify_status == true)
+    {
+        if (0 < vsprintf(ble_tx_buf, fmt, argp)) // build string
+        {
+            ble_tx_len = strlen(ble_tx_buf);
+            blecomm.write( ble_tx_buf, ble_tx_len );
+        }    
+    }        
+}
+
+void hal_ble_trace_print(const char *fmt, ...) 
+{
+    va_list argp;
+    va_start(argp, fmt);
+    vprint(fmt, argp);
+    va_end(argp);
+}
+
+
+bool hal_ble_rec_data(void) 
+{
+    ble_rec_data_len = blecomm.available();
+    parse_cmd_type = 0;
+    if(ble_rec_data_len > 0 )
+    {
+        parse_cmd_type = 1;
+        blecomm.read(ble_rec_data_buf,ble_rec_data_len);
+        ble_rec_done = true;
+        blecomm.flush(); // empty rx fifo
+        return true;
+    }
+    return false;
+}
+
+
 
 

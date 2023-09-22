@@ -17,17 +17,41 @@
 
 extern uint8_t app_gnss_scan_mode; // 0: GNSS_MW_MODE_STATIC, 1: GNSS_MW_MODE_MOBILE
 
-extern uint32_t app_gps_lock_in_rtc_second;
-extern uint32_t app_gps_lock_in_utc_second;
-
 extern uint8_t gps_scan_status;   //0:none  1:init 2:start 3:stop
 
-
-
+/**
+ * app_gps_scan_init() - Initializes the gnss scan
+ *
+ */
 void app_gps_scan_init( void );
+
+/**
+ * app_gps_scan_start() - Start the gnss scan
+ *
+ * @return    true: success, false: fail.  
+ */
 bool app_gps_scan_start( void );
+
+/**
+ * app_gps_get_results() - Get the gnss scan results
+ *
+ * @param buf    Data results 
+ *
+ * @param size    Size
+ *
+ */
 bool app_gps_get_results( uint8_t *buf, uint8_t *size );
+
+/**
+ * app_gps_scan_stop() - Stop the gnss scan
+ *
+ */
 void app_gps_scan_stop( void );
+
+/**
+ * app_gps_display_results() - Display the gnss scan results
+ *
+ */
 void app_gps_display_results( void );
 
 #endif

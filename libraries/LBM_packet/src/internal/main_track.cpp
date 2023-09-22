@@ -3,21 +3,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-
-#include <Adafruit_LittleFS.h>
-#include <InternalFileSystem.h>
-#include <Adafruit_TinyUSB.h> // for Serial
-
-using namespace Adafruit_LittleFS_Namespace;
-
-#define FILENAME    "/group_id.txt"
-
-
-static lfs_t *lfs;
-static lfs_file_t file;
-
-
-
 uint8_t tracker_gps_scan_len = 0;
 uint8_t tracker_gps_scan_data[64] = { 0 };
 
@@ -52,26 +37,9 @@ uint32_t app_task_track_get_utc( void )
     else return smtc_modem_hal_get_time_in_s( );
 }
 
-
-void app_task_track_set_scan_state( uint32_t bit )
-{
-    state_all |= bit;
-}
-
-void app_task_track_clear_scan_state( uint32_t bit )
-{
-    state_all &= ( ~bit );
-}
-
 void app_task_track_motion_index_update( void )
 {
     motion_index = motion_index_backup + 1;
-}
-
-void app_task_track_motion_index_clear( void )
-{
-    motion_index_backup = motion_index;
-    motion_index = 0;
 }
 
 //track-------------------------------------------------
@@ -326,7 +294,7 @@ bool app_task_track_wifi_is_busy( void )
     return track_wifi_busy;
 }
 
-void tracker_scan_type_set( uint8_t scan_type )
+void track_scan_type_set( uint8_t scan_type )
 {
     switch(scan_type)
     {
@@ -348,54 +316,3 @@ void tracker_scan_type_set( uint8_t scan_type )
 }
 
 
-
-//group id-----------------------------------------
-void gnss_group_id_init(void)
-{
-    uint32_t group_id_temp;
-    uint8_t len = sizeof(group_id_temp);
-    int ret = 0;
-    InternalFS.begin();
-    lfs = InternalFS._getFS();
-
-    ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDONLY);
-    // file existed
-    if ( ret == 0 )
-    {
-        uint8_t readlen;
-        ret = lfs_file_rewind(lfs, &file);
-        len = lfs_file_read(lfs, &file, &group_id_temp, len);
-        lfs_file_close(lfs, &file);
-        track_gnss_group_id = group_id_temp;
-    }
-    else
-    {
-        ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDWR | LFS_O_CREAT);
-        if( ret == 0 )
-        {
-            group_id_temp = track_gnss_group_id;
-            lfs_file_rewind(lfs, &file);
-            lfs_file_write(lfs, &file, &group_id_temp, sizeof(group_id_temp));
-            lfs_file_close(lfs, &file);
-        }
-    }   
-}
-
-bool gnss_group_id_write(void)
-{
-    uint32_t group_id_temp;
-    int ret = 0;
-
-    group_id_temp = track_gnss_group_id;
-    ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDWR | LFS_O_CREAT);
-    if(ret != 0)
-    {
-        lfs_file_close(lfs, &file); 
-        return false;   
-    }
-
-    ret = lfs_file_rewind(lfs, &file);
-    ret = lfs_file_write(lfs, &file, &group_id_temp, sizeof(group_id_temp));
-    lfs_file_close(lfs, &file);  
-    return true;
-}
