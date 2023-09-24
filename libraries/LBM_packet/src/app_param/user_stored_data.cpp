@@ -212,6 +212,8 @@ void param_init_func(void)
     }
     gnss_group_id_param_init();
 
+    hal_mcu_trace_print("track_gnss_group_id:%d\r\n",track_gnss_group_id); 
+
     app_append_param_init();
 }
 
@@ -758,7 +760,10 @@ void gnss_group_id_param_init(void)
                 hal_mcu_trace_print("gnss_group_id_param_init error,code:%02x\r\n",ret); 
             }  
             track_gnss_group_id = app_gnss_group_param.group_id;            
-        }   
+        } 
+        else{
+            track_gnss_group_id = app_gnss_group_param.group_id;  
+        }  
     }   
 }
 
