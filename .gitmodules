@@ -46,3 +46,4 @@
 [submodule "libraries/LBM_WM1110"]
 	path = libraries/LBM_WM1110
 	url = https://github.com/SeeedJP/LBM_WM1110.git
+	branch = dev/wenzy
