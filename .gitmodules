@@ -10,9 +10,6 @@
 [submodule "libraries/LBMX"]
 	path = libraries/LBMX
 	url = https://github.com/SeeedJP/LBMX.git
-[submodule "libraries/LBM_WM1110"]
-	path = libraries/LBM_WM1110
-	url = https://github.com/SeeedJP/LBM_WM1110.git
 [submodule "libraries/SdFat"]
 	path = libraries/SdFat
 	url = https://github.com/adafruit/SdFat.git
@@ -46,3 +43,6 @@
 	path = libraries/Wio_Tracker_1110_Examples
 	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
 	branch = dev/wenzy
+[submodule "libraries/LBM_WM1110"]
+	path = libraries/LBM_WM1110
+	url = https://github.com/SeeedJP/LBM_WM1110.git
