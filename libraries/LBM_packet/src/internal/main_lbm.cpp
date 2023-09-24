@@ -123,8 +123,11 @@ bool app_task_lora_tx_engine( void )
                     }
                 }
             }
-            app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
-            out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+            else
+            {
+                app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
+                out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+            }
         }
     }
     else
@@ -138,7 +141,7 @@ bool app_task_lora_tx_engine( void )
     
     if( app_task_lora_tx_buffer_len[out] )
     {
-        
+
         smtc_modem_get_status( 0, &modem_status );
         if(( modem_status & SMTC_MODEM_STATUS_JOINED ) == SMTC_MODEM_STATUS_JOINED 
             && app_lora_is_idle( ) 
