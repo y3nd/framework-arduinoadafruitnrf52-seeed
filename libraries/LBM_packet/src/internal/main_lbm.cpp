@@ -74,13 +74,20 @@ bool app_task_lora_tx_engine( void )
         {
             if(app_task_lora_tx_cache == true)
             {
-                if(packet_send_cnt >= 2)
+                if(app_task_lora_tx_off_line)
                 {
-                    packet_send_cnt = 0;
-                    app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
-                    app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
-                    out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
-                }   
+                    app_task_lora_tx_off_line = false;
+                }
+                else
+                {
+                    if(packet_send_cnt >= 2)
+                    {
+                        packet_send_cnt = 0;
+                        app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
+                        app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
+                        out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+                    }  
+                }
             }
             else
             {
