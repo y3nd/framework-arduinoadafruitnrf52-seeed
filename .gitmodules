@@ -39,11 +39,11 @@
 	path = libraries/Grove_Sunlight_Sensor
 	url = https://github.com/Seeed-Studio/Grove_Sunlight_Sensor.git
 	branch = Si1151
-[submodule "libraries/Wio_Tracker_1110_Examples"]
-	path = libraries/Wio_Tracker_1110_Examples
-	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
-	branch = dev/wenzy
 [submodule "libraries/LBM_WM1110"]
 	path = libraries/LBM_WM1110
 	url = https://github.com/SeeedJP/LBM_WM1110.git
+	branch = dev/wenzy
+[submodule "libraries/Wio_Tracker_1110_Examples"]
+	path = libraries/Wio_Tracker_1110_Examples
+	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
 	branch = dev/wenzy
