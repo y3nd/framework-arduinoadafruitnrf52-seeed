@@ -202,6 +202,13 @@ static const struct ATCommand_s ATCommand[] =
             .set = AT_return_error,
             .run = AT_return_error,
         },
+        {
+            .string = AT_POS_DEL,
+            .size_string = sizeof(AT_POS_DEL) - 1,
+            .get = AT_return_error,    
+            .set = AT_return_error,
+            .run = AT_POS_DEL_run,
+        },           
 };
 
 /**

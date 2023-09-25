@@ -174,7 +174,7 @@ typedef struct various_interval
 
 typedef struct append_param
 {
-	platform_t  Platform;            // 0:Sencap platform;1:Third-party platform    
+	platform_t  Platform;            // 0: SENSECAP_TTN, 1: OTHER, 2: Helium, 3: TTN, 4:SENSECAP_HELIUM    
 	uint8_t  Retry;                   
     bool cache_en;                   //cache data enabled/disable
 	uint8_t res1;				     //Four-byte alignment 

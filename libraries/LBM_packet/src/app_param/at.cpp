@@ -987,3 +987,30 @@ ATEerror_t AT_MeasurementValue_get(const char *param) {
     return AT_OK;    
 }
 /*------------------------AT+MEA=?\r\n-------------------------------------*/
+
+/*------------------------AT+POS_DEL\r\n-------------------------------------*/
+ATEerror_t AT_POS_DEL_run(const char *param)
+{
+    uint16_t del_cnt = 0;
+    del_cnt = get_pos_msg_cnt();
+    if(del_cnt > 0)
+    {
+        if(delete_pos_msg_datas(del_cnt,true) != 0)
+        {
+            return AT_DELETE_ERROR;
+        }
+    }
+    return AT_OK;
+}
+/*------------------------AT+POS_DEL\r\n-------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+

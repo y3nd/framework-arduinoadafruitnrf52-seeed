@@ -85,8 +85,11 @@ void lis3dhtr_irq_callback(void)
 {
     lis3dhtr_irq_count ++;
     lis3dhtr_irq_flag = 1;
-    move_trig_position = 1;
-    move_trig_collect = 1;
+    if((move_trig_position == 0) && (move_trig_collect == 0))
+    {
+        move_trig_position = 1;
+        move_trig_collect = 1;
+    }
 }
 
 //grove power init -----------------------------------------------------

@@ -97,13 +97,13 @@ def main():
     print("Almanac image written to " + filename + " file")
 
 
-    output_path = 'test_acmanac.bin'  # 输出文件的路径和文件名称，这里直接放在工程根目录下，所以没有写绝对路径
+    # output_path = 'test_acmanac.bin'  # 输出文件的路径和文件名称，这里直接放在工程根目录下，所以没有写绝对路径
     
-    # 待写入的数据
+    # # 待写入的数据
     
-    with open(output_path, 'ab') as f:
-        f.write(raw_bytes)
-        f.close()
+    # with open(output_path, 'ab') as f:
+    #     f.write(raw_bytes)
+    #     f.close()
 
 
 

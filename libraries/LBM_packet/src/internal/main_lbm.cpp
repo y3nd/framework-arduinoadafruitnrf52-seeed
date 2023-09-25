@@ -74,13 +74,20 @@ bool app_task_lora_tx_engine( void )
         {
             if(app_task_lora_tx_cache == true)
             {
-                if(packet_send_cnt >= 2)
+                if(app_task_lora_tx_off_line)
                 {
-                    packet_send_cnt = 0;
-                    app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
-                    app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
-                    out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
-                }   
+                    app_task_lora_tx_off_line = false;
+                }
+                else
+                {
+                    if(packet_send_cnt >= 2)
+                    {
+                        packet_send_cnt = 0;
+                        app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
+                        app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
+                        out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+                    }  
+                }
             }
             else
             {
@@ -123,8 +130,11 @@ bool app_task_lora_tx_engine( void )
                     }
                 }
             }
-            app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
-            out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+            else
+            {
+                app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
+                out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
+            }
         }
     }
     else
@@ -138,7 +148,7 @@ bool app_task_lora_tx_engine( void )
     
     if( app_task_lora_tx_buffer_len[out] )
     {
-        
+
         smtc_modem_get_status( 0, &modem_status );
         if(( modem_status & SMTC_MODEM_STATUS_JOINED ) == SMTC_MODEM_STATUS_JOINED 
             && app_lora_is_idle( ) 
@@ -326,7 +336,7 @@ bool app_task_lora_save_tx_data( uint8_t *buf, uint8_t len )
     }
 
     ret = write_position_msg(  );
-    if( ret ) hal_mcu_trace_print( "Save off-line data ok\r\n" );
+    if( ret == 0 ) hal_mcu_trace_print( "Save off-line data ok\r\n" );
     else hal_mcu_trace_print( "Save off-line data fail\r\n" );
     return result = ret == 0 ? true:false;
 }

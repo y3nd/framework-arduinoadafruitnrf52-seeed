@@ -64,7 +64,7 @@ extern void hal_ble_trace_print( const char* fmt, ... );
 #define AT_SENSOR           "+SENSOR" 
 #define AT_PLATFORM         "+PLATFORM"
 #define AT_MEA              "+MEA"  
-
+#define AT_POS_DEL          "+POS_DEL"
 
 /* USER CODE BEGIN EM */
 void hexTonum(unsigned char *out_data, unsigned char *in_data, unsigned short Size);
@@ -384,6 +384,13 @@ ATEerror_t AT_DefEUI_get(const char *param);
   * @retval AT_OK
   */
 ATEerror_t AT_MeasurementValue_get(const char *param);
+
+/**
+  * @brief  delete history data
+  * @param  param String parameter
+  * @retval AT_OK
+  */
+ATEerror_t AT_POS_DEL_run(const char *param);
 
 #endif /* __AT_H__ */
 

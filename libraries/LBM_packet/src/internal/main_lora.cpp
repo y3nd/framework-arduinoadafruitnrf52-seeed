@@ -167,6 +167,11 @@ void app_get_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf)
         case SMTC_MODEM_REGION_AS_923_GRP2:
         case SMTC_MODEM_REGION_AS_923_GRP3:
         case SMTC_MODEM_REGION_AS_923_GRP4:
+        case SMTC_MODEM_REGION_AS_923_HELIUM_1:
+        case SMTC_MODEM_REGION_AS_923_HELIUM_2:
+        case SMTC_MODEM_REGION_AS_923_HELIUM_3:
+        case SMTC_MODEM_REGION_AS_923_HELIUM_4:
+        case SMTC_MODEM_REGION_AS_923_HELIUM_1B:  
             memcpy(buf,adr_custom_list_as923_default,16);
             break;
 
@@ -195,7 +200,7 @@ void app_get_profile_list_by_region(smtc_modem_region_t REGION,uint8_t *buf)
         case SMTC_MODEM_REGION_CN_470:
 
         default:
-        
+            
             break;
     }
 
