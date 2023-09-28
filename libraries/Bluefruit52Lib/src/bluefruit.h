@@ -69,6 +69,9 @@
 #include "services/BLEMidi.h"
 #include "services/EddyStone.h"
 
+#include "services/BLEComm.h"
+
+
 #include "clients/BLEAncs.h"
 #include "clients/BLEClientUart.h"
 #include "clients/BLEClientDis.h"

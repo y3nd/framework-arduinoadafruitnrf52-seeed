@@ -32,4 +32,4 @@ cd -
 mv ../$FOLDERNAME-$VERSION.tar.bz2 .
 
 echo checksum ... SHA-256:`sha256sum $FOLDERNAME-$VERSION.tar.bz2 | awk '{print $1}'`
-echo size     ... `wc -c Seeed_nRF52_Boards-1.1.4.tar.bz2 | awk '{print $1}'`
+echo size     ... `wc -c $FOLDERNAME-$VERSION.tar.bz2 | awk '{print $1}'`

@@ -52,12 +52,27 @@ static void loop_task(void* arg)
   TinyUSB_Device_Init(0);
 #endif
 
+#if defined(ARDUINO_Seeed_XIAO_nRF52840) || defined(ARDUINO_Seeed_XIAO_nRF52840_Sense)
+
+#if CFG_DEBUG 
+  // If Serial is not begin(), call it to avoid hard fault
+  if(!Serial) Serial.begin(115200);
+#endif
+
+#elif defined(ARDUINO_WIO_TRACKER_1110)
+
 #if CFG_LOGGER == 0
   // If Serial is not begin(), call it to avoid hard fault
   if(!Serial) Serial.begin(115200);
 #elif CFG_LOGGER == 1
   // If Serial1 is not begin(), call it to avoid hard fault
   if(!Serial1) Serial1.begin(115200);
+#endif
+
+#else
+
+#error "Unsupported board"
+
 #endif
 
   setup();
@@ -118,7 +133,7 @@ void resumeLoop(void)
   }
 }
 
-#if CFG_LOGGER != 3 || defined(NRF52832_XXAA)
+#if CFG_LOGGER != 3
 extern "C"
 {
 
@@ -130,12 +145,10 @@ int _write (int fd, const void *buf, size_t count)
 
   size_t ret = 0;
 
-#if CFG_LOGGER == 0 || defined(NRF52832_XXAA)
+#if CFG_LOGGER == 2 || CFG_SYSVIEW
 
-  if ( Serial )
-  {
-    ret = Serial.write((const uint8_t *) buf, count);
-  }
+  SEGGER_RTT_Write(0, buf, count);
+  ret = count;
 
 #elif CFG_LOGGER == 1
 
@@ -144,10 +157,12 @@ int _write (int fd, const void *buf, size_t count)
     ret = Serial1.write((const uint8_t *) buf, count);
   }
 
-#elif CFG_LOGGER == 2
+#elif CFG_LOGGER == 0
 
-  SEGGER_RTT_Write(0, buf, count);
-  ret = count;
+  if ( Serial )
+  {
+    ret = Serial.write((const uint8_t *) buf, count);
+  }
 
 #endif
 

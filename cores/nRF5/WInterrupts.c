@@ -184,7 +184,7 @@ void enableInterruptIRQ(uint32_t pin)
 
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
   {
-    if (channelMap[ch] == pin)
+    if ((uint32_t)channelMap[ch] == pin)
     {
       nrf_gpiote_int_enable(NRF_GPIOTE, 1 << ch);
       break;
@@ -199,7 +199,7 @@ void disableInterruptIRQ(uint32_t pin)
 
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
   {
-    if (channelMap[ch] == pin)
+    if ((uint32_t)channelMap[ch] == pin)
     {
       nrf_gpiote_int_disable(NRF_GPIOTE, 1 << ch);
       break;
@@ -214,7 +214,7 @@ void clearInterruptIRQ(uint32_t pin)
 
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
   {
-    if (channelMap[ch] == pin)
+    if ((uint32_t)channelMap[ch] == pin)
     {
       nrf_gpiote_event_clear(NRF_GPIOTE, ch);
       break;
