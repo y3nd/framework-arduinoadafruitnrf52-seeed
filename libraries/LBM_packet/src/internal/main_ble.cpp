@@ -412,5 +412,10 @@ bool hal_ble_rec_data(void)
 }
 
 
+void app_ble_disconnect( void )
+{
+    bool ret = false;
+    ret =  Bluefruit.disconnect(0);;
+}
 
 

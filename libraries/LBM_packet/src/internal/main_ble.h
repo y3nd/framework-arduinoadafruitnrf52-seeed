@@ -146,5 +146,9 @@ void hal_ble_trace_print(const char *fmt, ...);
  */
 bool hal_ble_rec_data(void) ;
 
-
+/**
+ * app_ble_disconnect() - disconnect ble
+ *
+ */
+void app_ble_disconnect( void );
 #endif
