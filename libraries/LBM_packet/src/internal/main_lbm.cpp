@@ -123,7 +123,7 @@ bool app_task_lora_tx_engine( void )
                 int8_t i = 3;
                 while( i-- )
                 {
-                    if( delete_pos_msg_datas( 1, true ))
+                    if(0 == delete_pos_msg_datas( 1, true ))
                     {
                         hal_mcu_trace_print( "app delete old pos data ok\r\n" );
                         break;

@@ -60,10 +60,12 @@ void app_task_track_scan_send( void )
         //Location failure type
         if(( app_task_lora_clock_is_synch( ) == false ) || ( mw_gnss_event_state == GNSS_MW_EVENT_ERROR_NO_TIME ))
         {
+            mw_gnss_event_state = 0;
             tracker_scan_data_temp[1] = 13; // sync time fail
         }
         else if( mw_gnss_event_state == GNSS_MW_EVENT_ERROR_ALMANAC_UPDATE )
         {
+            mw_gnss_event_state = 0;
             tracker_scan_data_temp[1] = 14; // almanac too old
         }
         else

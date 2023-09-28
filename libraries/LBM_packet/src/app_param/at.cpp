@@ -1004,7 +1004,13 @@ ATEerror_t AT_POS_DEL_run(const char *param)
 }
 /*------------------------AT+POS_DEL\r\n-------------------------------------*/
 
-
+/*------------------------AT+DISCONNECT\r\n-------------------------------------*/
+ATEerror_t AT_Disconnect(const char *param) 
+{
+    app_ble_disconnect();
+    return AT_OK;
+}
+/*------------------------AT+DISCONNECT\r\n-------------------------------------*/
 
 
 

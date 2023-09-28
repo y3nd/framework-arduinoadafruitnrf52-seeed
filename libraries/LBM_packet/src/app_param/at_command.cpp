@@ -208,7 +208,14 @@ static const struct ATCommand_s ATCommand[] =
             .get = AT_return_error,    
             .set = AT_return_error,
             .run = AT_POS_DEL_run,
-        },           
+        },  
+        {
+            .string = AT_DISCONNECT,
+            .size_string = sizeof(AT_DISCONNECT) - 1,
+            .get = AT_return_error,
+            .set = AT_return_error,
+            .run = AT_Disconnect,
+        },         
 };
 
 /**
