@@ -27,11 +27,17 @@ if len(sys.argv) > 1:
 else:
     build_boards = default_boards
 
-all_examples = list(glob.iglob('libraries/**/*.ino', recursive=True))
-all_examples.sort()
-
 def build_examples(variant):
     global exit_status, success_count, fail_count, skip_count, build_format, build_separator
+
+    all_examples = []
+    if variant == 'wio_tracker_1110':
+        all_examples += list(glob.iglob('libraries/Wio_Tracker_1110_Examples/**/*.ino', recursive=True))
+    else:
+        all_examples += list(glob.iglob('libraries/Wire/**/*.ino', recursive=True))
+        all_examples += list(glob.iglob('libraries/Adafruit_TinyUSB_Arduino/**/*.ino', recursive=True))
+
+    all_examples.sort()
 
     print('\n')
     print(build_separator)
@@ -40,7 +46,10 @@ def build_examples(variant):
     print(build_format.format('Library', 'Example', '\033[39mResult\033[0m', 'Time'))
     print(build_separator)
     
-    fqbn = "adafruit:nrf52:{}:softdevice={},debug=l0".format(variant, 's140v6' if variant != 'feather52832' else 's132v6')
+    if variant == 'wio_tracker_1110':
+        fqbn = "Seeeduino:nrf52:{}:softdevice={},debug_output={},usb_cdc={},power_supply_grove={},lbm_custom={}".format(variant, 's140v6', 'serial', 'enable', 'on', 'sensecap')
+    else:
+        fqbn = "Seeeduino:nrf52:{}:softdevice={},debug=l0".format(variant, 's140v6' if variant != 'feather52832' else 's132v6')
 
     for sketch in all_examples:
         # skip TinyUSB library examples for nRF52832
