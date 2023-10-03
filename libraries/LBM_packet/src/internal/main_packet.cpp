@@ -118,7 +118,6 @@ void app_task_user_sensor_data_send( void )
 smtc_modem_region_t sensecap_lorawan_region(void)
 {
     smtc_modem_region_t lorawan_region = SMTC_MODEM_REGION_EU_868; // can be change by user
-    uint8_t lorawan_region_sub_band = 2; // can be change by user
 
     switch( app_param.lora_info.ActiveRegion )
     {
@@ -186,8 +185,6 @@ smtc_modem_region_t sensecap_lorawan_region(void)
         default:
         break;
     }
-    
-    lorawan_region_sub_band =  app_param.lora_info.ChannelGroup + 1;
 
     return lorawan_region;
 }

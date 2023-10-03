@@ -465,9 +465,6 @@ bool  si1151_data_get(float* UV_val)
 //consume 30ms
 bool  sound_data_get(uint16_t* sound_val)
 {
-    static bool init_average = false;
-    static uint8_t index = 1;   
-
     uint32_t sum = 0;
     int  adc_val = 0;
     uint16_t temp_val = 0;
@@ -519,9 +516,6 @@ bool  dps310_data_get(uint32_t* pressure_val)
 {
 	float Detection_pressure;
 	uint8_t oversampling = 7;
-	int16_t ret;
-	int i;
-	int size = 10;
 
     if(iic_mutex_status == true)
         return false;
@@ -535,7 +529,7 @@ bool  dps310_data_get(uint32_t* pressure_val)
 #endif
 	if(sensor_types&dps310_sensor_type) 
     {
-        ret = Dps310PressureSensor.measurePressureOnce(Detection_pressure, oversampling);
+        Dps310PressureSensor.measurePressureOnce(Detection_pressure, oversampling);
         *pressure_val = Detection_pressure;
         iic_mutex_status = false;
         return true;
@@ -743,14 +737,14 @@ void single_fact_sensor_display_results(uint8_t type)
             //pressure
             if(sensor_types&dps310_sensor_type)
             {
-                printf("pressure value:%u\r\n",dps310_pressure_val);
+                printf("pressure value:%lu\r\n",dps310_pressure_val);
             }
             break;
         case  sgp41_sensor_type:
             //voc index
             if(sensor_types&sgp41_sensor_type)
             {
-                printf("voc_index:%d\r\n",sgp41_voc_index); 
+                printf("voc_index:%ld\r\n",sgp41_voc_index); 
             }
             break;
         case  si1151_sensor_type:
@@ -907,7 +901,7 @@ void app_sensor_data_display_results( void )
     //pressure
     if(sensor_types&dps310_sensor_type)
     {
-        printf("pressure value:%u\r\n",dps310_pressure_val);
+        printf("pressure value:%lu\r\n",dps310_pressure_val);
     }
 
     //distance
@@ -922,7 +916,7 @@ void app_sensor_data_display_results( void )
     //voc index
     if(sensor_types&sgp41_sensor_type)
     {
-        printf("voc_index:%d\r\n",sgp41_voc_index); 
+        printf("voc_index:%ld\r\n",sgp41_voc_index); 
     }
 
     //sound

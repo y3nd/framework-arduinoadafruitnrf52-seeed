@@ -31,25 +31,6 @@ static void print_16_02x(uint8_t *pt);
 static void print_8_02x(uint8_t *pt);
 
 /**
- * @brief  Print an int
- * @param  value to print
- */
-static void print_d(int32_t value);
-
-/**
- * @brief  Print an unsigned int
- * @param  value to print
- */
-static void print_u(uint32_t value);
-
-/**
- * @brief  Check if character in parameter is alphanumeric
- * @param  Char for the alphanumeric check
- */
-static int32_t isHex(char Char);
-
-
-/**
  * @brief  Check if character in parameter is number
  * @param  Char for the number check
  */
@@ -69,13 +50,6 @@ int32_t isNums(const char *str, uint32_t Size);
  */
 //static uint8_t Char2Nibble(char Char);
 
-/**
- * @brief  Convert a string into a buffer of data
- * @param  str string to convert
- * @param  data output buffer
- * @param  Size of input string
- */
-static int32_t stringToData(const char *str, uint8_t *data, uint32_t Size);
 void hexTonum(unsigned char *out_data, unsigned char *in_data, unsigned short Size) 
 {
     for(unsigned char i = 0; i < Size; i++)
@@ -85,7 +59,7 @@ void hexTonum(unsigned char *out_data, unsigned char *in_data, unsigned short Si
     }
     for(unsigned char i = 0; i < 2*Size; i++)
     {
-        if ((out_data[i] >= 0) && (out_data[i] <= 9)) 
+        if (out_data[i] <= 9) 
         {
             out_data[i] = '0'+out_data[i];
         } 
@@ -146,18 +120,6 @@ static int8_t ascii_4bit_to_hex(uint8_t ascii) {
     return result;
 }
 
-static void uint64_to_bytes(uint64_t data,uint8_t *bytes) {
-    bytes[0] = (uint8_t)(data>>56);
-    bytes[1] = (uint8_t)(data>>48);
-    bytes[2] = (uint8_t)(data>>40);
-    bytes[3] = (uint8_t)(data>>32);
-    bytes[4] = (uint8_t)(data>>24);
-    bytes[5] = (uint8_t)(data>>16);
-    bytes[6] = (uint8_t)(data>>8);
-    bytes[7] = (uint8_t)(data);
-}
-
-
 static int8_t Data_Analysis(const char *param, uint8_t Buff[], uint8_t lenth) {
     uint8_t param_length = 0;
     int8_t result = 0;
@@ -207,57 +169,6 @@ static void print_8_02x(uint8_t *pt)
         pt[0], pt[1], pt[2], pt[3], pt[4], pt[5], pt[6], pt[7]);
 }
 
-static void print_d(int32_t value) 
-{
-    AT_PRINTF("%d\r\n", value);
-}
-
-static void print_u(uint32_t value) 
-{
-    AT_PRINTF("%u\r\n", value);
-}
-
-static int32_t stringToData(const char *str, uint8_t *data, uint32_t Size) 
-{
-    char hex[3];
-    hex[2] = 0;
-    int32_t ii = 0;
-    while (Size-- > 0) 
-    {
-        hex[0] = *str++;
-        hex[1] = *str++;
-
-        /*check if input is hex */
-        if ((isHex(hex[0]) == -1) || (isHex(hex[1]) == -1)) 
-        {
-            return -1;
-        }
-        /*check if input is even nb of character*/
-        if ((hex[1] == '\0') || (hex[1] == ',')) 
-        {
-            return -1;
-        }
-        data[ii] = (Char2Nibble(hex[0]) << 4) + Char2Nibble(hex[1]);
-        ii++;
-    }
-
-    return 0;
-}
-
-
-static int32_t isHex(char Char) 
-{
-    if (((Char >= '0') && (Char <= '9')) ||
-        ((Char >= 'a') && (Char <= 'f')) ||
-        ((Char >= 'A') && (Char <= 'F'))) 
-    {
-        return 0;
-    } 
-    else
-    {
-        return -1;
-    }
-}
 static int32_t isNum(char Char) 
 {
     if ((Char >= '0') && (Char <= '9'))
@@ -271,7 +182,7 @@ static int32_t isNum(char Char)
 }
 int32_t isNums(const char *str, uint32_t Size) 
 {
-    for(uint8_t u8i; u8i < Size; u8i++)
+    for(uint8_t u8i = 0; u8i < Size; u8i++)
     {
         /*check if input is hex */
         if ((isNum(str[u8i]) == -1)) 

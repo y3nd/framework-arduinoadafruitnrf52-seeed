@@ -228,7 +228,6 @@ void parse_cmd(const char *cmd, uint16_t length)
 {
     ATEerror_t status = AT_OK;
     const struct ATCommand_s *Current_ATCommand;
-    int32_t i;
 
     if (strncmp(cmd, "AT", 2)) 
     {
@@ -251,7 +250,7 @@ void parse_cmd(const char *cmd, uint16_t length)
         {
             status = AT_ERROR;
             cmd += 2;
-            for (i = 0; i < (sizeof(ATCommand) / sizeof(struct ATCommand_s)); i++) 
+            for (size_t i = 0; i < (sizeof(ATCommand) / sizeof(struct ATCommand_s)); i++) 
             {
                 if (strncmp(cmd, ATCommand[i].string, ATCommand[i].size_string) == 0) 
                 {

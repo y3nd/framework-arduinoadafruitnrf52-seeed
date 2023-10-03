@@ -214,7 +214,7 @@ bool app_task_lora_tx_queue( uint8_t *buf, uint8_t len, bool confirmed, bool eme
         {
             app_task_lora_tx_buffer[in][j] = buf[j];
         }
-        app_task_lora_tx_in = (++app_task_lora_tx_in)%APP_TASK_LORA_TX_QUEUE_MAX;
+        app_task_lora_tx_in = (app_task_lora_tx_in + 1) % APP_TASK_LORA_TX_QUEUE_MAX;
     }
     else
     {

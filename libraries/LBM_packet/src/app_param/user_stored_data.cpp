@@ -99,7 +99,6 @@ uint8_t delete_lfs_file( uint16_t file_name )
 void param_init_func(void)
 {
     uint16_t param_len = 0;
-    uint16_t log_len = 0;
     uint16_t pos_info_len = 0;    
     uint8_t ret=0;
     uint8_t u8_crc=0;
@@ -535,7 +534,6 @@ uint8_t delete_pos_msg_datas(uint16_t del_cnt,bool is_old)
     uint8_t rc = 0;
     uint16_t app_tag_id = 0;
     uint16_t cursor_dir = 0;    
-    uint16_t rlen = sizeof(pos_msg_param_t);
     uint8_t del_status = 0;
     uint16_t rlen1 = sizeof(pos_msg_file_id_t);
     pos_msg_file_id_t pos_msg_file_temp;

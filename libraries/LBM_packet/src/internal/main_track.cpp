@@ -31,7 +31,7 @@ uint32_t app_task_track_time_stamp = 0;
 
 uint32_t app_task_track_get_utc( void )
 {
-    uint32_t utc_lns = 0, utc_ble = 0;
+    uint32_t utc_lns = 0;
     utc_lns = app_task_lora_get_timestamp( );  
     if( utc_lns ) return utc_lns;  
     else return smtc_modem_hal_get_time_in_s( );
