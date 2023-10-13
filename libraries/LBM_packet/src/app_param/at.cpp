@@ -390,8 +390,11 @@ ATEerror_t AT_Region_get(const char *param) {
 
 ATEerror_t AT_Region_set(const char *param) {
 
-    LoRaMacRegion_t region;
-    if (tiny_sscanf(param, "%hhu", &region) != 1) {
+    uint16_t region;
+    if (tiny_sscanf(param, "%hu", &region) != 1) {
+        return AT_PARAM_ERROR;
+    }
+    if (region >= 256) {
         return AT_PARAM_ERROR;
     }
 #ifdef LORAWAN_APP_PARAM_ENABLE
@@ -423,8 +426,8 @@ ATEerror_t AT_ActivationType_get(const char *param) {
 }
 
 ATEerror_t AT_ActivationType_set(const char *param) {
-    uint8_t activetype;
-    if (tiny_sscanf(param, "%hhu", &activetype) != 1) {
+    uint16_t activetype;
+    if (tiny_sscanf(param, "%hu", &activetype) != 1) {
         return AT_PARAM_ERROR;
     }
     if (activetype > ACTIVATION_TYPE_OTAA) {
@@ -445,8 +448,8 @@ ATEerror_t AT_ChannelGroup_get(const char *param) {
 
 ATEerror_t AT_ChannelGroup_set(const char *param) {
 
-    uint8_t channelgroup = 0;
-    if (tiny_sscanf(param, "%hhu", &channelgroup) != 1) {
+    uint16_t channelgroup = 0;
+    if (tiny_sscanf(param, "%hu", &channelgroup) != 1) {
         return AT_PARAM_ERROR;
     }
     if ((channelgroup <= 7) && ((app_param.lora_info.ActiveRegion == LORAMAC_REGION_US915) || (app_param.lora_info.ActiveRegion == LORAMAC_REGION_AU915))) {
@@ -831,8 +834,8 @@ ATEerror_t AT_Platform_get(const char *param) {
 
 ATEerror_t AT_Platform_set(const char *param) {
 
-    uint8_t platform = 0;
-    if (tiny_sscanf(param, "%hhu", &platform) != 1) {
+    uint16_t platform = 0;
+    if (tiny_sscanf(param, "%hu", &platform) != 1) {
         return AT_PARAM_ERROR;
     }
     
