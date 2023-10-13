@@ -65,8 +65,10 @@ extern void hal_ble_trace_print( const char* fmt, ... );
 #define AT_PLATFORM         "+PLATFORM"
 #define AT_MEA              "+MEA"  
 #define AT_POS_DEL          "+POS_DEL"
+#define AT_POS_MSG          "+POS_MSG"
 
-#define AT_DISCONNECT       "+DISCONNECT"  
+#define AT_DISCONNECT       "+DISCONNECT" 
+
 
 /* USER CODE BEGIN EM */
 void hexTonum(unsigned char *out_data, unsigned char *in_data, unsigned short Size);
@@ -400,6 +402,14 @@ ATEerror_t AT_POS_DEL_run(const char *param);
   * @retval AT_OK
   */
 ATEerror_t AT_Disconnect(const char *param);
+
+/**
+  * @brief  print position data 
+  * @param  param String parameter
+  * @retval AT_OK
+  */
+ATEerror_t AT_POS_MSG_run(const char *param);
+
 #endif /* __AT_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

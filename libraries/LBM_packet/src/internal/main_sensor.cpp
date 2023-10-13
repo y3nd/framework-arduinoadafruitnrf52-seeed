@@ -337,7 +337,7 @@ bool lis3dhtr_data_get(float* x, float* y, float* z)
         }
         else
         {
-            state_all = state_all|TRACKER_STATE_BIT4_DEV_STATIC;
+            // state_all = state_all|TRACKER_STATE_BIT4_DEV_STATIC;
         }
         iic_mutex_status = false;
         return true;   

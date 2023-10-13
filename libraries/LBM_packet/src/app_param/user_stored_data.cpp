@@ -633,55 +633,81 @@ uint8_t delete_pos_msg_datas(uint16_t del_cnt,bool is_old)
 
 void print_pos_msg_data(void)
 {
-    if( pos_msg_param.pos_type == pos_state )
+    uint8_t pos_buffer[128];
+    uint8_t pos_data_size = 0;
+    pos_buffer[0] = pos_msg_param.pos_type;
+    if( pos_msg_param.pos_type != DATA_ID_UP_PACKET_GNSS_RAW )
     {
-        hal_mcu_trace_print( "utc:%u,pos_state:%d,event_status:%d\r\n",pos_msg_param.utc_time, ( pos_msg_param.pos_status >> 24 ) & 0xff,pos_msg_param.pos_status & 0xffffff );
+        memcpyr( pos_buffer + 1, ( uint8_t * )( &pos_msg_param.pos_status ), 4 );
+        memcpyr( pos_buffer + 5, ( uint8_t * )( &pos_msg_param.utc_time ), 4 );
     }
-    else
+    switch( pos_msg_param.pos_type )
     {
-        hal_mcu_trace_print( "utc:%u,event_status:%d,motion_index:%d,",pos_msg_param.utc_time, ( pos_msg_param.pos_status >> 8 ) & 0xffffff, pos_msg_param.pos_status & 0xff );
-        switch(pos_msg_param.pos_type)
+        case DATA_ID_UP_PACKET_WIFI_RAW:
         {
-            case  pos_gnss_raw:
-                    hal_mcu_trace_print("gnss: zone_flag:%u, group_id:%u, len:%u\r\n", pos_msg_param.context.gps_context.zone_flag,\
-                                                                            pos_msg_param.context.gps_context.group_id,\
-                                                                            pos_msg_param.context.gps_context.gnss_len);  
-                    for(uint8_t u8i = 0;u8i<pos_msg_param.context.gps_context.gnss_len;u8i++)
-                    {
-                        hal_mcu_trace_print("%02x ",pos_msg_param.context.gps_context.gnss_res[u8i]);  
-                    }
-                    hal_mcu_trace_print("\r\n");  
-                    break;
-            case  pos_wifi:
-                    hal_mcu_trace_print("WIFI: \r\n");      
-                    for(uint8_t u8i = 0;u8i<pos_msg_param.context_count;u8i++)
-                    {
-                        hal_mcu_trace_print("mac:%02x:%02x:%02x:%02x:%02x:%02x,rssi:%d\r\n", pos_msg_param.context.wifi_context[u8i].wifi_mac[5],\
-                                                                    pos_msg_param.context.wifi_context[u8i].wifi_mac[4],\
-                                                                    pos_msg_param.context.wifi_context[u8i].wifi_mac[3],\
-                                                                    pos_msg_param.context.wifi_context[u8i].wifi_mac[2],\
-                                                                    pos_msg_param.context.wifi_context[u8i].wifi_mac[1],\
-                                                                    pos_msg_param.context.wifi_context[u8i].wifi_mac[0],\
-                                                                    pos_msg_param.context.wifi_context[u8i].cur_rssi); // 
-                    }
-                    break; 
-            case  pos_beac:
-                    hal_mcu_trace_print("BEACON: \r\n");     
-                    for(uint8_t u8i = 0;u8i<pos_msg_param.context_count;u8i++)
-                    {
-                        hal_mcu_trace_print("mac:%02x,%02x,%02x,%02x,%02x,%02x,rssi:%d\r\n",pos_msg_param.context.beac_context[u8i].beac_mac[5],\
-                                                                    pos_msg_param.context.beac_context[u8i].beac_mac[4],\
-                                                                    pos_msg_param.context.beac_context[u8i].beac_mac[3],\
-                                                                    pos_msg_param.context.beac_context[u8i].beac_mac[2],\
-                                                                    pos_msg_param.context.beac_context[u8i].beac_mac[1],\
-                                                                    pos_msg_param.context.beac_context[u8i].beac_mac[0],\
-                                                                    pos_msg_param.context.beac_context[u8i].cur_rssi); // 
-                    }                
-                    break;                                
-            default:   
-                    break;  
+            for( uint8_t i = 0; i < pos_msg_param.context_count; i++ )
+            {
+                memcpy( pos_buffer + 9 + i * 7, &pos_msg_param.context.wifi_context[i].wifi_mac, 6 );
+                memcpy( pos_buffer + 9 + i * 7 + 6, &pos_msg_param.context.wifi_context[i].cur_rssi, 1 );
+            }
+            pos_data_size = 9 + pos_msg_param.context_count * 7;
         }
+        break;
+
+        case DATA_ID_UP_PACKET_BLE_RAW:
+        {
+            for( uint8_t i = 0; i < pos_msg_param.context_count; i++ )
+            {
+                memcpy( pos_buffer + 9 + i * 7, &pos_msg_param.context.beac_context[i].beac_mac, 6 );
+                memcpy( pos_buffer + 9 + i * 7 + 6, &pos_msg_param.context.beac_context[i].cur_rssi, 1 );
+            }
+            pos_data_size = 9 + pos_msg_param.context_count * 7;
+        }
+        break;
+
+        case DATA_ID_UP_PACKET_GNSS_RAW:
+        {
+            pos_buffer[1] = pos_msg_param.context.gps_context.zone_flag; // fragment data
+            pos_buffer[4] = pos_msg_param.context.gps_context.gnss_len; // GNSS raw lenght
+            memcpyr( pos_buffer + 2, ( uint8_t * )( &pos_msg_param.context.gps_context.group_id ), 2 ); // group id
+            memcpy( pos_buffer + 5, pos_msg_param.context.gps_context.gnss_res, pos_msg_param.context.gps_context.gnss_len ); // GNSS raw data
+            pos_data_size = 5 + pos_msg_param.context.gps_context.gnss_len;
+        }
+        break;
+
+        case DATA_ID_UP_PACKET_GNSS_END:
+        {
+            pos_buffer[9] = pos_msg_param.context.gps_context.zone_flag; // fragment data
+            memcpyr( pos_buffer + 11, ( uint8_t * )( &pos_msg_param.context.gps_context.group_id ), 2 ); // group id
+            pos_data_size = 12;
+        }
+        break;
+
+        case DATA_ID_UP_PACKET_POS_STATUS:
+        {
+            pos_data_size = pos_data_size + 9;
+        }
+        break;
+        case DATA_ID_UP_PACKET_USER_SENSOR:
+        {
+            memcpy( &pos_buffer[1], ( uint8_t * )( pos_msg_param.context.sensor_context.sensor_data ), pos_msg_param.context.sensor_context.len );
+            pos_data_size = pos_data_size + pos_msg_param.context.sensor_context.len+1;
+        }
+        break;
+        case DATA_ID_UP_PACKET_FACT_SENSOR:
+        {
+            memcpy( &pos_buffer[1], ( uint8_t * )( pos_msg_param.context.sensor_context.sensor_data ), pos_msg_param.context.sensor_context.len );
+            pos_data_size = pos_data_size + pos_msg_param.context.sensor_context.len+1;
+        }
+        break;            
+        default:
+        break;
     }
+    for(uint8_t u8i = 0; u8i < pos_data_size; u8i++)
+    {
+        AT_PRINTF("%02x",pos_buffer[u8i]);
+    }
+    AT_PRINTF("\r\n");
 }
 
 
@@ -725,7 +751,7 @@ void gnss_group_id_param_init(void)
 
     lfs_t *lfs;
     lfs_file_t file;
-    lfs = InternalFS._getFS();
+    lfs = ExternalFS._getFS();
     ret = lfs_file_open(lfs, &file, FILENAME, LFS_O_RDONLY);
     // file existed
     if ( ret == 0 )

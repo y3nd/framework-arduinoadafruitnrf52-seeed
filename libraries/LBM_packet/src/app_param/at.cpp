@@ -918,6 +918,14 @@ ATEerror_t AT_POS_DEL_run(const char *param)
 }
 /*------------------------AT+POS_DEL\r\n-------------------------------------*/
 
+/*------------------------AT+POS_MSG\r\n-------------------------------------*/
+ATEerror_t AT_POS_MSG_run(const char *param)
+{
+    get_pos_msg_data();
+    return AT_OK;
+}
+/*------------------------AT+POS_MSG\r\n-------------------------------------*/
+
 /*------------------------AT+DISCONNECT\r\n-------------------------------------*/
 ATEerror_t AT_Disconnect(const char *param) 
 {

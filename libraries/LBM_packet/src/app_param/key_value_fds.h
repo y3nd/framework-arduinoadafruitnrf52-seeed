@@ -45,7 +45,7 @@
 #include <cstdlib>
 
 #include <Adafruit_LittleFS.h>
-#include <InternalFileSystem.h>
+#include <ExternalFileSystem.h>
 
 
 /**

@@ -111,9 +111,9 @@ static char * key_value_fds_int_key_convert(uint32_t key)
 
 int key_value_fds_init(void)
 {
-    if(InternalFS.begin())
+    if(ExternalFS.begin())
     {
-        s_op_instance_ptr = InternalFS._getFS();      
+        s_op_instance_ptr = ExternalFS._getFS();      
         s_default_instance = *s_op_instance_ptr;
         return KEY_VALUE_FDS_ERR_OK;
     }

@@ -16,7 +16,7 @@
 #define APPEND_PARAM_INFO_FILE      (0x10A)
 
 #define POS_SAVE_COUNT_MAX      120   
-#define POS_SAVE_IN_FILE_MAX    60 
+#define POS_SAVE_IN_FILE_MAX    40 
 #define POS_FILE_ID_START       (0x400)
 #define POS_FILE_ID_END         (0x400+POS_SAVE_COUNT_MAX)
 

@@ -9,13 +9,13 @@
 
 //If defined as 1:detect iic slave device hot swap function
 #ifndef SENSOR_HOT_SWAPPABLE_DETECT
-#define SENSOR_HOT_SWAPPABLE_DETECT     1
+#define SENSOR_HOT_SWAPPABLE_DETECT     0
 #endif
 
 
 //This parameter is defined based on whether the actual sensor is connected
-#define SOUND_SENSOR_AVAILABLE          1       // for mission pack  the sound sensor is delivered with the system by default
-#define ULTRASONIC_SENSOR_AVAILABLE     1       // for mission pack  the ultrasonic sensor is delivered with the system by default
+#define SOUND_SENSOR_AVAILABLE          0       // for mission pack  the sound sensor is delivered with the system by default
+#define ULTRASONIC_SENSOR_AVAILABLE     0       // for mission pack  the ultrasonic sensor is delivered with the system by default
 
 
 
