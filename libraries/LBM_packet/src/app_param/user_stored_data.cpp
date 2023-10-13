@@ -651,6 +651,7 @@ void print_pos_msg_data(void)
                         hal_mcu_trace_print("%02x ",pos_msg_param.context.gps_context.gnss_res[u8i]);  
                     }
                     hal_mcu_trace_print("\r\n");  
+                    break;
             case  pos_wifi:
                     hal_mcu_trace_print("WIFI: \r\n");      
                     for(uint8_t u8i = 0;u8i<pos_msg_param.context_count;u8i++)
@@ -663,7 +664,7 @@ void print_pos_msg_data(void)
                                                                     pos_msg_param.context.wifi_context[u8i].wifi_mac[0],\
                                                                     pos_msg_param.context.wifi_context[u8i].cur_rssi); // 
                     }
-                break; 
+                    break; 
             case  pos_beac:
                     hal_mcu_trace_print("BEACON: \r\n");     
                     for(uint8_t u8i = 0;u8i<pos_msg_param.context_count;u8i++)
