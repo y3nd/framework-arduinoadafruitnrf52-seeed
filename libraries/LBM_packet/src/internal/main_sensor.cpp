@@ -847,8 +847,8 @@ void factory_sensor_data_combined(void)
     }
     else
     {
-        factory_sensor_data[10] = 0x80;
-        factory_sensor_data[11] = 0x00;
+        factory_sensor_data[12] = 0x80;
+        factory_sensor_data[13] = 0x00;
     }
 
     //3-axis
