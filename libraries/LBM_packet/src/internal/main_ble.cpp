@@ -375,14 +375,25 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 static void vprint(const char *fmt, va_list argp) 
 {
     uint8_t ble_tx_len = 0;
-    
+    uint8_t ble_tx_size = 0;
     notify_status = blecomm.notifyEnabled();
     if(notify_status == true)
     {
         if (0 < vsprintf(ble_tx_buf, fmt, argp)) // build string
         {
             ble_tx_len = strlen(ble_tx_buf);
-            blecomm.write( ble_tx_buf, ble_tx_len );
+            ble_tx_size = blecomm.write( ble_tx_buf, ble_tx_len );
+            printf("%s",ble_tx_buf);
+            uint8_t retry_cnt = 0;
+            while((ble_tx_size == 0)&&(ble_tx_len>0))
+            {
+                ble_tx_size = blecomm.write( ble_tx_buf, ble_tx_len );    
+                retry_cnt++;
+                if(retry_cnt >=3)
+                {
+                    break;
+                }
+            }
         }    
     }        
 }
