@@ -45,6 +45,6 @@
 [submodule "libraries/Wio_Tracker_1110_Examples"]
 	path = libraries/Wio_Tracker_1110_Examples
 	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
-[submodule "libraries/ExternFileSytem"]
-	path = libraries/ExternFileSytem
-	url = https://github.com/Seeed-Studio/ExternFileSytem.git
+[submodule "libraries/ExternalFileSytem"]
+	path = libraries/ExternalFileSytem
+	url = https://github.com/Seeed-Studio/ExternalFileSytem.git
