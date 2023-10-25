@@ -383,7 +383,6 @@ static void vprint(const char *fmt, va_list argp)
         {
             ble_tx_len = strlen(ble_tx_buf);
             ble_tx_size = blecomm.write( ble_tx_buf, ble_tx_len );
-            printf("%s",ble_tx_buf);
             uint8_t retry_cnt = 0;
             while((ble_tx_size == 0)&&(ble_tx_len>0))
             {
