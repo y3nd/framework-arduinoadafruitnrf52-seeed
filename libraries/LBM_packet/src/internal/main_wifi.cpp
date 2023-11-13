@@ -94,7 +94,7 @@ bool app_wifi_get_results( uint8_t* result, uint8_t *size )
 
 void app_wifi_display_results( void )
 {
-    printf( "Number of results: %u\r\n", wifi_results.nbr_results );
+    printf( "Print the raw Wi-Fi results: %u\r\n", wifi_results.nbr_results );
     for( uint8_t i = 0; i < wifi_results.nbr_results; i++ )
     {
         for( uint8_t j = 0; j < WIFI_AP_ADDRESS_SIZE; j++ )

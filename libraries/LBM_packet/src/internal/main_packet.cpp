@@ -117,7 +117,11 @@ void app_task_user_sensor_data_send( void )
 
 smtc_modem_region_t sensecap_lorawan_region(void)
 {
+    smtc_modem_return_code_t rc = SMTC_MODEM_RC_OK;
+    
     smtc_modem_region_t lorawan_region = SMTC_MODEM_REGION_EU_868; // can be change by user
+
+    uint8_t lorawan_region_sub_band = 2; // can be change by user
 
     switch( app_param.lora_info.ActiveRegion )
     {
@@ -185,13 +189,67 @@ smtc_modem_region_t sensecap_lorawan_region(void)
         default:
         break;
     }
+    lorawan_region_sub_band =  app_param.lora_info.ChannelGroup + 1;
+    if( lorawan_region == SMTC_MODEM_REGION_US_915 || lorawan_region == SMTC_MODEM_REGION_AU_915 )
+    {
+        rc = smtc_modem_set_region_sub_band( stack_id, lorawan_region_sub_band );
+        if( rc != SMTC_MODEM_RC_OK )
+        {
+            HAL_DBG_TRACE_ERROR( "smtc_modem_set_region_sub_band failed (%d)\n", rc );
+        }
+    }
+
 
     return lorawan_region;
 }
 
 
+void app_task_booting_data_send( uint16_t position_interval, uint16_t sample_interval)
+{
+    uint8_t booting_data_buf_temp[64];
+    uint8_t booting_data_len_temp;
+    memset( booting_data_buf_temp, 0, sizeof( booting_data_buf_temp ));
+    booting_data_len_temp = 0;
 
+    booting_data_buf_temp[0] = DATA_ID_UP_PACKET_BOOT_DATA;
+    booting_data_len_temp += 1;
 
+    //battry  status
+    booting_data_buf_temp[1] = 0x80;
+    booting_data_len_temp += 1;
 
+    //firmware Version
+    booting_data_buf_temp[2] = TRACKER_SW_MAJOR_VER;
+    booting_data_buf_temp[3] = TRACKER_SW_MINOR_VER;
+    booting_data_len_temp += 2;
 
+    //hardware Version
+    booting_data_buf_temp[4] = TRACKER_HW_MAJOR_VER;
+    booting_data_buf_temp[5] = TRACKER_HW_MINOR_VER;
+    booting_data_len_temp += 2;
+
+    //track scan type
+    booting_data_buf_temp[6] = tracker_scan_type;
+    booting_data_len_temp += 1;
+
+    //read sensor data interval in minutes
+    booting_data_buf_temp[7] = (sample_interval>>8)&0xFF;
+    booting_data_buf_temp[8] = sample_interval&0xFF;
+    booting_data_len_temp += 2;
+
+    //track scan data interval in minutes
+    booting_data_buf_temp[9] = (position_interval>>8)&0xFF;
+    booting_data_buf_temp[10] = position_interval&0xFF;;
+    booting_data_len_temp += 2;
+
+    hal_mcu_trace_print("booting datas uplink:");
+    for(uint8_t u8i = 0; u8i < booting_data_len_temp; u8i++ )
+    {
+        hal_mcu_trace_print("%02x",booting_data_buf_temp[u8i]);
+    }
+    hal_mcu_trace_print("\r\n"); 
+
+    app_task_lora_tx_queue( booting_data_buf_temp, booting_data_len_temp, true, false );        
+
+}
 

@@ -6,7 +6,10 @@
 
 
 #define TRACKER_SW_MAJOR_VER    0
-#define TRACKER_SW_MINOR_VER    2
+#define TRACKER_SW_MINOR_VER    3
+
+#define TRACKER_HW_MAJOR_VER    1
+#define TRACKER_HW_MINOR_VER    0
 
 #define TRACKER_GPS_EN      1
 #define TRACKER_WIFI_EN     1

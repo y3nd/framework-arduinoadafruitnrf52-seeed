@@ -77,7 +77,7 @@ void app_gps_display_results( void )
 {
     if( gnss_mw_custom_send_buffer_num )
     {
-        printf( "GNSS Raw:\r\n" );
+        printf( "Print the raw GNSS dataset:\r\n" );
     }
     for( uint8_t i = 0; i < gnss_mw_custom_send_buffer_num; i++ )
     {

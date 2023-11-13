@@ -3,6 +3,11 @@
 #include <cstdio>
 #include <cstdlib>
 
+#ifdef LR11XX
+#include <lbm/smtc_modem_core/radio_drivers/lr11xx_driver/src/lr11xx_driver_version.h>
+#include <lbm/smtc_modem_core/radio_drivers/lr11xx_driver/src/lr11xx_system.h>
+#endif
+
 uint8_t send_retry_type = 1; // 0: at most confirm twice;  1: at most confirm once; 2:don't need check confirm 
 
 
@@ -83,7 +88,16 @@ bool app_task_lora_tx_engine( void )
                     if(packet_send_cnt >= 2)
                     {
                         packet_send_cnt = 0;
-                        app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
+                        bool data_cache_ret = app_task_lora_save_tx_data( app_task_lora_tx_buffer[app_task_lora_tx_out], app_task_lora_tx_buffer_len[app_task_lora_tx_out] );
+                        if(data_cache_ret)
+                        {
+                            printf("Unable to receive confirm Ack from LNS, Cache the current packet:");
+                            for(uint8_t u8i = 0; u8i < app_task_lora_tx_buffer_len[app_task_lora_tx_out]; u8i++ )
+                            {
+                                printf("%02x",app_task_lora_tx_buffer[app_task_lora_tx_out][u8i]);
+                            }
+                            printf("\r\n"); 
+                        }
                         app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
                         out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
                     }  
@@ -132,6 +146,7 @@ bool app_task_lora_tx_engine( void )
             }
             else
             {
+                packet_send_cnt = 0;
                 app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
                 out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
             }
@@ -141,6 +156,7 @@ bool app_task_lora_tx_engine( void )
     {
         if(last_time_tx_res == true)
         {
+            packet_send_cnt = 0;
             app_task_lora_tx_buffer_len[out] = 0;   //Clear the last data
             out = (++app_task_lora_tx_out % APP_TASK_LORA_TX_QUEUE_MAX);
         }
@@ -148,7 +164,6 @@ bool app_task_lora_tx_engine( void )
     
     if( app_task_lora_tx_buffer_len[out] )
     {
-
         smtc_modem_get_status( 0, &modem_status );
         if(( modem_status & SMTC_MODEM_STATUS_JOINED ) == SMTC_MODEM_STATUS_JOINED 
             && app_lora_is_idle( ) 
@@ -158,6 +173,13 @@ bool app_task_lora_tx_engine( void )
             bool result = app_lora_send_frame( app_task_lora_tx_buffer[out], app_task_lora_tx_buffer_len[out], app_task_lora_tx_buffer_confirmed[out], false );
             if( result )
             {
+                printf("Sending Uplink Payload:");
+                for(uint8_t u8i = 0; u8i < app_task_lora_tx_buffer_len[out]; u8i++ )
+                {
+                    printf("%02x ",app_task_lora_tx_buffer[out][u8i]);
+                }
+                printf("\r\n"); 
+
                 tx_last_timestemp = smtc_modem_hal_get_time_in_ms( );
                 app_task_lora_tx_out = out;
                 hal_mcu_trace_print( "app_task_lora_tx_out: %u,confirm:%s\r\n", app_task_lora_tx_out,app_task_lora_tx_buffer_confirmed[out] == true ? "true":"false" );
@@ -187,11 +209,15 @@ bool app_task_lora_tx_engine( void )
     }
     else
     {
+        last_time_tx_res = false;
         if(app_task_lora_tx_cache == true)
         {
-            app_taks_lora_off_line_send_and_check();
+            bool offline_data_send_flag = app_task_lora_off_line_send_and_check();
+            if(offline_data_send_flag)
+            {
+                return true;
+            }
         }
-        last_time_tx_res = false;
         return false;
     }
     last_time_tx_res = true;
@@ -332,7 +358,8 @@ bool app_task_lora_save_tx_data( uint8_t *buf, uint8_t len )
         }
         break;  
         default:
-        break;
+            return false;
+        // break;
     }
 
     ret = write_position_msg(  );
@@ -341,7 +368,7 @@ bool app_task_lora_save_tx_data( uint8_t *buf, uint8_t len )
     return result = ret == 0 ? true:false;
 }
 
-void app_taks_lora_off_line_send_and_check( void )
+bool app_task_lora_off_line_send_and_check( void )
 {
     smtc_modem_status_mask_t modem_status;
     pos_msg_param_t pos_msg;
@@ -352,7 +379,7 @@ void app_taks_lora_off_line_send_and_check( void )
     uint16_t pos_msg_cnt = get_pos_msg_cnt( );
     if( pos_msg_cnt == 0 )
     {
-        return;
+        return false;
     }
 
     if( read_pos_data( &pos_msg, true ))
@@ -402,7 +429,7 @@ void app_taks_lora_off_line_send_and_check( void )
             case DATA_ID_UP_PACKET_GNSS_END:
             {
                 app_lora_data_tx_buffer[9] = pos_msg.context.gps_context.zone_flag; // fragment data
-                memcpyr( app_lora_data_tx_buffer + 11, ( uint8_t * )( &pos_msg.context.gps_context.group_id ), 2 ); // group id
+                memcpyr( app_lora_data_tx_buffer + 10, ( uint8_t * )( &pos_msg.context.gps_context.group_id ), 2 ); // group id
                 app_lora_data_tx_size = 12;
             }
             break;
@@ -427,7 +454,7 @@ void app_taks_lora_off_line_send_and_check( void )
             default:
             {
                 delete_pos_msg_datas( 1, true );
-                return;
+                return false;
             }
             break;
         }
@@ -445,15 +472,22 @@ void app_taks_lora_off_line_send_and_check( void )
             && app_task_radio_gnss_is_busy( ) == false && app_task_radio_wifi_is_busy( ) == false 
             && app_task_track_gnss_is_busy( ) == false && app_task_track_wifi_is_busy( ) == false )
         {
-
             bool result = app_lora_send_frame( app_lora_data_tx_buffer, app_lora_data_tx_size, true, false );
             if( result )
             {
+                printf("Sending the cached packet: ");
+                for(uint8_t u8i = 0; u8i < app_lora_data_tx_size; u8i++ )
+                {
+                    printf("%02x",app_lora_data_tx_buffer[u8i]);
+                }
+                printf("\r\n"); 
+                
                 tx_last_timestemp = smtc_modem_hal_get_time_in_ms( );
                 smtc_modem_get_toa_status( &app_task_lora_tx_toa,app_lora_data_tx_size + 13 );
                 app_task_lora_tx_check = true;
                 app_task_lora_tx_off_line = true;
                 app_task_lora_tx_confirmed_count = app_lora_get_confirmed_count( );
+                return true;
             }
         }
     }
@@ -461,4 +495,42 @@ void app_taks_lora_off_line_send_and_check( void )
     {
         hal_mcu_trace_print( "app read old pos data fail\r\n" );
     }
+    return false;
+}
+
+
+void LBM_versions_print(ralf_t* ralf)
+{
+#ifdef LR11XX
+    lr11xx_system_version_t systemVersion;
+    if (smtc_modem_suspend_before_user_radio_access() != SMTC_MODEM_RC_OK) abort();
+    lr11xx_system_get_version(ralf->ral.context, &systemVersion);
+    if (smtc_modem_resume_after_user_radio_access() != SMTC_MODEM_RC_OK) abort();
+#endif
+
+    smtc_modem_version_t modemVersion;
+    if (smtc_modem_get_modem_version(&modemVersion) != SMTC_MODEM_RC_OK) abort();
+
+    smtc_modem_lorawan_version_t lorawanVersion;
+    if (smtc_modem_get_lorawan_version(&lorawanVersion) != SMTC_MODEM_RC_OK) abort();
+
+    smtc_modem_lorawan_version_t rpVersion;
+    if (smtc_modem_get_regional_params_version(&rpVersion) != SMTC_MODEM_RC_OK) abort();
+
+    mw_version_t gnssVersion;
+    if (gnss_mw_get_version(&gnssVersion) != MW_RC_OK) abort();
+
+    mw_version_t wifiVersion;
+    if (wifi_mw_get_version(&wifiVersion) != MW_RC_OK) abort();
+
+    printf("Semtech LBM versions:\n");
+#ifdef LR11XX
+    printf("-LR11xx system    = hw:0x%02x, type:0x%02x, fw:0x%04x\n", systemVersion.hw, systemVersion.type, systemVersion.fw);
+    printf("-LR11xx driver    = %s\n", lr11xx_driver_version_get_version_string());
+#endif
+    printf("-Modem            = v%d.%d.%d\n", modemVersion.major, modemVersion.minor, modemVersion.patch);
+    printf("-LoRaWAN Stack    = v%d.%d.%d.%d\n", lorawanVersion.major, lorawanVersion.minor, lorawanVersion.patch, lorawanVersion.revision);
+    printf("-Regional params  = v%d.%d.%d.%d\n", rpVersion.major, rpVersion.minor, rpVersion.patch, rpVersion.revision);
+    printf("-GNSS             = v%d.%d.%d\n", gnssVersion.major, gnssVersion.minor, gnssVersion.patch);
+    printf("-Wi-Fi            = v%d.%d.%d\n", wifiVersion.major, wifiVersion.minor, wifiVersion.patch);
 }

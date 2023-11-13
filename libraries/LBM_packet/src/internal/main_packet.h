@@ -14,7 +14,7 @@
 
 #define DATA_ID_UP_PACKET_USER_SENSOR       0x17
 #define DATA_ID_UP_PACKET_FACT_SENSOR       0x18
-
+#define DATA_ID_UP_PACKET_BOOT_DATA         0x19
 /*--------------------------- downlink ---------------------------*/
 #define DATA_ID_DOWN_PACKET_USER_CODE       0x8E
 
@@ -63,5 +63,7 @@ void app_task_user_sensor_data_send( void );
  * 
  */
 smtc_modem_region_t sensecap_lorawan_region(void);
+
+void app_task_booting_data_send( uint16_t position_interval, uint16_t sample_interval);
 
 #endif

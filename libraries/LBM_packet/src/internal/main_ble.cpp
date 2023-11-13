@@ -331,8 +331,8 @@ void connect_callback(uint16_t conn_handle)
     ble_gap_addr_t ble_gap_addr;
     ble_gap_addr = connection->getPeerAddr(); 
     connection->getPeerName(central_name, sizeof(central_name));
-    hal_mcu_trace_print("Connected to %s\r\n",central_name);
-    hal_mcu_trace_print("mac:%02x:%02x:%02x:%02x:%02x:%02x\r\n",ble_gap_addr.addr[5],ble_gap_addr.addr[4],ble_gap_addr.addr[3],\
+    printf("Connected to %s\r\n",central_name);
+    printf("mac:%02x:%02x:%02x:%02x:%02x:%02x\r\n",ble_gap_addr.addr[5],ble_gap_addr.addr[4],ble_gap_addr.addr[3],\
                                             ble_gap_addr.addr[2],ble_gap_addr.addr[1],ble_gap_addr.addr[0]);
 
     // request to update data length
@@ -367,7 +367,7 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
     (void) conn_handle;
     (void) reason;
 
-    hal_mcu_trace_print("Disconnected, reason = 0x%0x",reason);
+    printf("Disconnected, reason = 0x%0x",reason);
     ble_connect_status = 3;    
 }
 

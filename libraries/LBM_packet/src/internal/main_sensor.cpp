@@ -723,14 +723,14 @@ void single_fact_sensor_display_results(uint8_t type)
             //temperture & humidity
             if(sensor_types&sht4x_sensor_type)
             {
-                printf("temperature:%0.2f, humidity:%0.2f%%\r\n",sht4x_temperature, sht4x_humidity);        
+                printf("Temperature:%0.2f\r\nHumidity:%0.2f%%\r\n",sht4x_temperature, sht4x_humidity);        
             }
             break;
         case  lis3dhtr_sensor_type:
             //3-axis
             if(sensor_types&lis3dhtr_sensor_type)
             {
-                printf("x:%0.2f y:%0.2f z:%0.2f\r\n",lis3dhtr_x,lis3dhtr_y,lis3dhtr_z);
+                printf("3-axis: x:%0.2f y:%0.2f z:%0.2f\r\n",lis3dhtr_x,lis3dhtr_y,lis3dhtr_z);
             }
             break;
         case  dps310_sensor_type:
@@ -756,11 +756,18 @@ void single_fact_sensor_display_results(uint8_t type)
             break;
         case sound_sensor_type:
             //sound
-            printf("sound_val:%d mV\r\n",sound_val);
+            if(sensor_types&sound_sensor_type)
+            {
+                printf("sound_val:%d mV\r\n",sound_val);
+            }
             break;
         case ultrasonic_sensor_type:
             //distance
-            printf("distance:%d cm\r\n",ultrasonic_distance_cm);
+            if(sensor_types&ultrasonic_sensor_type)
+            {
+                printf("distance:%d cm\r\n",ultrasonic_distance_cm);
+            }
+            
             break;
         default:
             break;
@@ -895,7 +902,7 @@ void app_sensor_data_display_results( void )
     //temperture & humidity
     if(sensor_types&sht4x_sensor_type)
     {
-        printf("temperature:%0.2f, humidity:%0.2f%%\r\n",sht4x_temperature, sht4x_humidity);        
+        printf("Temperature:%0.2f\r\nHumidity:%0.2f%%\r\n",sht4x_temperature, sht4x_humidity);        
     }
 
     //pressure
@@ -903,9 +910,11 @@ void app_sensor_data_display_results( void )
     {
         printf("pressure value:%lu\r\n",dps310_pressure_val);
     }
-
     //distance
-    printf("distance:%d cm\r\n",ultrasonic_distance_cm);
+    if(sensor_types&ultrasonic_sensor_type)
+    {
+        printf("distance:%d cm\r\n",ultrasonic_distance_cm);
+    }
 
     //uv
     if(sensor_types&si1151_sensor_type )
@@ -920,13 +929,15 @@ void app_sensor_data_display_results( void )
     }
 
     //sound
-    
-    printf("sound_val:%d mV\r\n",sound_val);
+    if(sensor_types&sound_sensor_type)
+    {
+        printf("sound_val:%d mV\r\n",sound_val);       
+    }
 
     //3-axis
     if(sensor_types&lis3dhtr_sensor_type)
     {
-        printf("x:%0.2f y:%0.2f z:%0.2f\r\n",lis3dhtr_x,lis3dhtr_y,lis3dhtr_z);
+        printf("3-axis: x:%0.2f y:%0.2f z:%0.2f\r\n",lis3dhtr_x,lis3dhtr_y,lis3dhtr_z);
     }
 }
 

@@ -90,14 +90,15 @@ void app_task_packet_downlink_decode( uint8_t *buf, uint8_t len );
 bool app_task_lora_save_tx_data( uint8_t *buf, uint8_t len );
 
 /**
- * app_taks_lora_off_line_send_and_check() - Check and resend historical data
+ * app_task_lora_off_line_send_and_check() - Check and resend historical data
  *
  * @param buf    Data buffer
  *
  * @param len    Data len
  *
+ * @return  True: success false: fail
  */
-void app_taks_lora_off_line_send_and_check( void );
+bool app_task_lora_off_line_send_and_check( void );
 
-
+void LBM_versions_print(ralf_t* ralf);
 #endif
