@@ -48,3 +48,24 @@
 [submodule "libraries/ExternalFileSytem"]
 	path = libraries/ExternalFileSytem
 	url = https://github.com/Seeed-Studio/ExternalFileSytem.git
+[submodule "libraries/WM1110_Storage"]
+	path = libraries/WM1110_Storage
+	url = https://github.com/Seeed-Studio/WM1110_Storage.git
+[submodule "libraries/WM1110_Geolocation"]
+	path = libraries/WM1110_Geolocation
+	url = https://github.com/Seeed-Studio/WM1110_Geolocation.git
+[submodule "libraries/WM1110_BLE"]
+	path = libraries/WM1110_BLE
+	url = https://github.com/Seeed-Studio/WM1110_BLE.git
+[submodule "libraries/WM1110_At_Config"]
+	path = libraries/WM1110_At_Config
+	url = https://github.com/Seeed-Studio/WM1110_At_Config.git
+[submodule "libraries/WM1110_Almanac_Update"]
+	path = libraries/WM1110_Almanac_Update
+	url = https://github.com/Seeed-Studio/WM1110_Almanac_Update.git
+[submodule "libraries/Wio_Tracker_Board_Peripheral"]
+	path = libraries/Wio_Tracker_Board_Peripheral
+	url = https://github.com/Seeed-Studio/Wio_Tracker_Board_Peripheral.git
+[submodule "libraries/LBM_Modem_Common"]
+	path = libraries/LBM_Modem_Common
+	url = https://github.com/Seeed-Studio/LBM_Modem_Common.git
