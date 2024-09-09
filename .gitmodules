@@ -10,9 +10,6 @@
 [submodule "libraries/LBMX"]
 	path = libraries/LBMX
 	url = https://github.com/SeeedJP/LBMX.git
-[submodule "libraries/LBM_WM1110"]
-	path = libraries/LBM_WM1110
-	url = https://github.com/SeeedJP/LBM_WM1110.git
 [submodule "libraries/SdFat"]
 	path = libraries/SdFat
 	url = https://github.com/adafruit/SdFat.git
@@ -42,9 +39,6 @@
 	path = libraries/Grove_Sunlight_Sensor
 	url = https://github.com/Seeed-Studio/Grove_Sunlight_Sensor.git
 	branch = Si1151
-[submodule "libraries/Wio_Tracker_1110_Examples"]
-	path = libraries/Wio_Tracker_1110_Examples
-	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
 [submodule "libraries/ExternalFileSytem"]
 	path = libraries/ExternalFileSytem
 	url = https://github.com/Seeed-Studio/ExternalFileSytem.git
@@ -69,3 +63,9 @@
 [submodule "libraries/LBM_Modem_Common"]
 	path = libraries/LBM_Modem_Common
 	url = https://github.com/Seeed-Studio/LBM_Modem_Common.git
+[submodule "libraries/Wio_Tracker_1110_Examples"]
+	path = libraries/Wio_Tracker_1110_Examples
+	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
+[submodule "libraries/LBM_WM1110"]
+	path = libraries/LBM_WM1110
+	url = https://github.com/Seeed-Studio/LBM_WM1110.git
