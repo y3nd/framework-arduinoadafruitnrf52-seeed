@@ -52,7 +52,7 @@ static void loop_task(void* arg)
   TinyUSB_Device_Init(0);
 #endif
 
-#if defined(ARDUINO_Seeed_XIAO_nRF52840) || defined(ARDUINO_Seeed_XIAO_nRF52840_Sense)
+#if defined(ARDUINO_Seeed_XIAO_nRF52840) || defined(ARDUINO_Seeed_XIAO_nRF52840_Sense) || defined(ARDUINO_Seeed_XIAO_nRF52840_Plus)
 
 #if CFG_DEBUG 
   // If Serial is not begin(), call it to avoid hard fault

@@ -12,6 +12,7 @@ jobs:
         - 'xiaonRF52840'
         - 'xiaonRF52840Sense'
         - 'wio_tracker_1110'
+        - 'xiaonRF52840Plus'
 
     runs-on: ubuntu-latest
     
