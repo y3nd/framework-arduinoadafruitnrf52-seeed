@@ -151,6 +151,8 @@ void BLEPeriph::_eventHandler(ble_evt_t* evt)
   }
 }
 
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
+
 void BLEPeriph::printInfo(void)
 {
   char const * title_fmt = "%-16s: ";
@@ -166,3 +168,5 @@ void BLEPeriph::printInfo(void)
   logger.printf("%d ms", _ppcp.conn_sup_timeout*10);
   logger.println();
 }
+
+#endif

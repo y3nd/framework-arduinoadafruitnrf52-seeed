@@ -51,6 +51,21 @@ int attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
  */
 void detachInterrupt(uint32_t pin);
 
+/*
+ * \brief Enable interrupt IRQ.
+ */
+void enableInterruptIRQ(uint32_t pin);
+
+/*
+ * \brief Disable interrupt IRQ.
+ */
+void disableInterruptIRQ(uint32_t pin);
+
+/*
+ * \brief Clear interrupt IRQ.
+ */
+void clearInterruptIRQ(uint32_t pin);
+
 #ifdef __cplusplus
 }
 #endif

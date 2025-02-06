@@ -69,6 +69,9 @@
 #include "services/BLEMidi.h"
 #include "services/EddyStone.h"
 
+#include "services/BLEComm.h"
+
+
 #include "clients/BLEAncs.h"
 #include "clients/BLEClientUart.h"
 #include "clients/BLEClientDis.h"
@@ -200,7 +203,9 @@ class AdafruitBluefruit
     void _stopConnLed  (void);
     void _setConnLed   (bool on_off);
 
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
     void printInfo(void);
+#endif
 
   private:
     /*------------- SoftDevice Configuration -------------*/

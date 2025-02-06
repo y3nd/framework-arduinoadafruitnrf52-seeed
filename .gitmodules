@@ -1,3 +1,68 @@
 [submodule "libraries/Adafruit_TinyUSB_Arduino"]
 	path = libraries/Adafruit_TinyUSB_Arduino
 	url = https://github.com/adafruit/Adafruit_TinyUSB_Arduino.git
+[submodule "libraries/arduino-core"]
+	path = libraries/arduino-core
+	url = https://github.com/Sensirion/arduino-core.git
+[submodule "libraries/LBMX"]
+	path = libraries/LBMX
+	url = https://github.com/SeeedJP/LBMX.git
+[submodule "libraries/SdFat"]
+	path = libraries/SdFat
+	url = https://github.com/adafruit/SdFat.git
+[submodule "libraries/Adafruit_SPIFlash"]
+	path = libraries/Adafruit_SPIFlash
+	url = https://github.com/adafruit/Adafruit_SPIFlash.git
+[submodule "libraries/arduino-gas-index-algorithm"]
+	path = libraries/arduino-gas-index-algorithm
+	url = https://github.com/Sensirion/arduino-gas-index-algorithm.git
+[submodule "libraries/arduino-i2c-sgp41"]
+	path = libraries/arduino-i2c-sgp41
+	url = https://github.com/Sensirion/arduino-i2c-sgp41.git
+[submodule "libraries/arduino-i2c-sht4x"]
+	path = libraries/arduino-i2c-sht4x
+	url = https://github.com/Sensirion/arduino-i2c-sht4x.git
+[submodule "libraries/Seeed_Arduino_DPS310"]
+	path = libraries/Seeed_Arduino_DPS310
+	url = https://github.com/Seeed-Studio/Seeed_Arduino_DPS310.git
+	branch = dps310
+[submodule "libraries/Seeed_Arduino_LIS3DHTR"]
+	path = libraries/Seeed_Arduino_LIS3DHTR
+	url = https://github.com/Seeed-Studio/Seeed_Arduino_LIS3DHTR.git
+[submodule "libraries/Seeed_Arduino_UltrasonicRanger"]
+	path = libraries/Seeed_Arduino_UltrasonicRanger
+	url = https://github.com/Seeed-Studio/Seeed_Arduino_UltrasonicRanger.git
+[submodule "libraries/Grove_Sunlight_Sensor"]
+	path = libraries/Grove_Sunlight_Sensor
+	url = https://github.com/Seeed-Studio/Grove_Sunlight_Sensor.git
+	branch = Si1151
+[submodule "libraries/ExternalFileSytem"]
+	path = libraries/ExternalFileSytem
+	url = https://github.com/Seeed-Studio/ExternalFileSytem.git
+[submodule "libraries/WM1110_Storage"]
+	path = libraries/WM1110_Storage
+	url = https://github.com/Seeed-Studio/WM1110_Storage.git
+[submodule "libraries/WM1110_Geolocation"]
+	path = libraries/WM1110_Geolocation
+	url = https://github.com/Seeed-Studio/WM1110_Geolocation.git
+[submodule "libraries/WM1110_BLE"]
+	path = libraries/WM1110_BLE
+	url = https://github.com/Seeed-Studio/WM1110_BLE.git
+[submodule "libraries/WM1110_At_Config"]
+	path = libraries/WM1110_At_Config
+	url = https://github.com/Seeed-Studio/WM1110_At_Config.git
+[submodule "libraries/WM1110_Almanac_Update"]
+	path = libraries/WM1110_Almanac_Update
+	url = https://github.com/Seeed-Studio/WM1110_Almanac_Update.git
+[submodule "libraries/Wio_Tracker_Board_Peripheral"]
+	path = libraries/Wio_Tracker_Board_Peripheral
+	url = https://github.com/Seeed-Studio/Wio_Tracker_Board_Peripheral.git
+[submodule "libraries/LBM_Modem_Common"]
+	path = libraries/LBM_Modem_Common
+	url = https://github.com/Seeed-Studio/LBM_Modem_Common.git
+[submodule "libraries/Wio_Tracker_1110_Examples"]
+	path = libraries/Wio_Tracker_1110_Examples
+	url = https://github.com/Seeed-Studio/Wio_Tracker_1110_Examples.git
+[submodule "libraries/LBM_WM1110"]
+	path = libraries/LBM_WM1110
+	url = https://github.com/Seeed-Studio/LBM_WM1110.git

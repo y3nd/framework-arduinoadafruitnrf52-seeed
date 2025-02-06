@@ -4,6 +4,9 @@ This repository contains the Arduino BSP for Seeed nRF52 series:
 
 - [Seeed Studio XIAO nRF52840](https://www.seeedstudio.com/Seeed-XIAO-BLE-nRF52840-p-5201.html)
 - [Seeed Studio XIAO nRF52840 Sense](https://www.seeedstudio.com/Seeed-XIAO-BLE-Sense-nRF52840-p-5253.html)
+- [Seeed Studio Wio Tracker 1110](https://www.seeedstudio.com/Wio-Tracker-1110-Dev-Board-p-5799.html)
+- [Seeed Studio XIAO nRF52840 Plus](https://www.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Plus-p-6359.html)
+- [Seeed Studio XIAO nRF52840 Sense Plus](https://www.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Sense-Plus-p-6360.html)
 
 ## BSP Installation
 
@@ -41,6 +44,14 @@ There are two methods that you can use to install this BSP. We highly recommend 
    
  6. Restart the Arduino IDE
  7. Once the BSP is installed, select 'Seeed XIAO nRF52840' from the Tools -> Board menu, which will update your system config to use the right compiler and settings for the nRF52.
+
+### Optional (Core Development): Create Seeed nRF52 BSP file
+
+```
+$ git clone --depth 1 --recurse-submodules https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino Seeed_nRF52_Boards
+$ cd Seeed_nRF52_Boards
+$ ./extras/pack_release.sh
+```
 
 ### Adafruit's nrfutil tools
 

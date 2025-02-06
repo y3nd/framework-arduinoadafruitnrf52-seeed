@@ -68,7 +68,9 @@ class BLEPeriph
      * Although declare as public, it is meant to be invoked by internal code.
      *------------------------------------------------------------------*/
     void _eventHandler(ble_evt_t* evt);
+#if defined(NRF52832_XXAA) || defined(USE_TINYUSB)
     void printInfo(void);
+#endif
 
   private:
     ble_gap_conn_params_t _ppcp;

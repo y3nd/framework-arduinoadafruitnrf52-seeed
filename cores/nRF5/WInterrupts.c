@@ -177,6 +177,51 @@ void detachInterrupt(uint32_t pin)
   }
 }
 
+void enableInterruptIRQ(uint32_t pin)
+{
+  if (pin >= PINS_COUNT) return;
+  pin = g_ADigitalPinMap[pin];
+
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
+  {
+    if ((uint32_t)channelMap[ch] == pin)
+    {
+      nrf_gpiote_int_enable(NRF_GPIOTE, 1 << ch);
+      break;
+    }
+  }
+}
+
+void disableInterruptIRQ(uint32_t pin)
+{
+  if (pin >= PINS_COUNT) return;
+  pin = g_ADigitalPinMap[pin];
+
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
+  {
+    if ((uint32_t)channelMap[ch] == pin)
+    {
+      nrf_gpiote_int_disable(NRF_GPIOTE, 1 << ch);
+      break;
+    }
+  }
+}
+
+void clearInterruptIRQ(uint32_t pin)
+{
+  if (pin >= PINS_COUNT) return;
+  pin = g_ADigitalPinMap[pin];
+
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++)
+  {
+    if ((uint32_t)channelMap[ch] == pin)
+    {
+      nrf_gpiote_event_clear(NRF_GPIOTE, ch);
+      break;
+    }
+  }
+}
+
 void GPIOTE_IRQHandler()
 {
 #if CFG_SYSVIEW
