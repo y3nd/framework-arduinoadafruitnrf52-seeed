@@ -66,3 +66,6 @@
 [submodule "libraries/LBM_WM1110"]
 	path = libraries/LBM_WM1110
 	url = https://github.com/Seeed-Studio/LBM_WM1110.git
+[submodule "libraries/Adafruit_nRFCrypto"]
+	path = libraries/Adafruit_nRFCrypto
+	url = https://github.com/adafruit/Adafruit_nRFCrypto.git
